@@ -2,7 +2,7 @@
 if (!isset($basePath)) {
     // Fallback if accessed directly
     $scriptName = $_SERVER['SCRIPT_NAME'];
-    $baseDir = dirname(dirname($scriptName));
+    $baseDir = dirname($scriptName);
     $baseDir = str_replace('\\', '/', $baseDir);
     $basePath = rtrim($baseDir, '/') . '/';
 }
@@ -51,6 +51,7 @@ function getDashboardUrl($role, $basePath) {
 <body>
 
 <!-- Sticky Navigation Bar -->
+<?php if (empty($hideNavbar)): ?>
 <header class="header-wrapper sticky-top navbar-expand-lg" id="mainHeader">
     <nav class="navbar navbar-expand-lg navbar-light py-2 py-lg-3 transition-all">
         <div class="container">
@@ -118,4 +119,5 @@ function getDashboardUrl($role, $basePath) {
         </div>
     </nav>
 </header>
+<?php endif; ?>
 

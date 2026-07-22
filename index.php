@@ -5,8 +5,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Helper to get base path for links and redirects
-$scriptName = $_SERVER['SCRIPT_NAME']; // e.g., /NGO system landing and login/public/index.php
-$baseDir = dirname(dirname($scriptName)); // e.g., /NGO system landing and login
+$scriptName = $_SERVER['SCRIPT_NAME']; // e.g., /NGO system landing and login/index.php
+$baseDir = dirname($scriptName); // e.g., /NGO system landing and login
 $baseDir = str_replace('\\', '/', $baseDir);
 $basePath = rtrim($baseDir, '/') . '/';
 

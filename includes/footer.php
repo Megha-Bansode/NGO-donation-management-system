@@ -1,7 +1,7 @@
 <?php
 if (!isset($basePath)) {
     $scriptName = $_SERVER['SCRIPT_NAME'];
-    $baseDir = dirname(dirname($scriptName));
+    $baseDir = dirname($scriptName);
     $baseDir = str_replace('\\', '/', $baseDir);
     $basePath = rtrim($baseDir, '/') . '/';
 }

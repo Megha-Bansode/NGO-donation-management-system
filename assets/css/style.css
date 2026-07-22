@@ -912,6 +912,118 @@ input, button, select, textarea {
     margin-top: 4px;
 }
 
+/* ── Field State: Valid (green border) ── */
+.form-control.field-valid {
+    border-color: #22c55e;
+    background-color: #f0fdf4;
+}
+.form-control.field-valid:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+/* ── Field State: Invalid (red border) ── */
+.form-control.field-invalid {
+    border-color: #ef4444;
+    background-color: #fff5f5;
+}
+.form-control.field-invalid:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+}
+
+/* ── Password Strength Wrapper ── */
+.password-strength-wrapper {
+    display: none;
+    margin-top: 10px;
+    animation: fadeInDown 0.25s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Strength Bar */
+.strength-bar-track {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.strength-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* Rule List */
+.strength-rules {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+}
+
+@media (max-width: 480px) {
+    .strength-rules { grid-template-columns: 1fr; }
+}
+
+.rule {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.rule.rule-passed {
+    color: #16a34a;
+}
+
+.rule-icon {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.rule-fail { color: #94a3b8; }
+.rule-pass { color: #22c55e; }
+
+/* ── Login Spinner ── */
+#btnSpinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Disabled Submit Button ── */
+.btn.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: auto; /* keep visible but blocked */
+}
+
+
 .alert {
     padding: 12px 16px;
     border-radius: var(--radius-sm);

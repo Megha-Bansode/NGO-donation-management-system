@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 if (!isset($basePath)) {
     $scriptName = $_SERVER['SCRIPT_NAME'];
-    $baseDir = dirname(dirname($scriptName));
+    $baseDir = dirname($scriptName);
     $baseDir = str_replace('\\', '/', $baseDir);
     $basePath = rtrim($baseDir, '/') . '/';
 }
@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = "Forgot Password";
+$hideNavbar = true;
 include __DIR__ . '/../../includes/header.php';
 ?>
 
