@@ -29,15 +29,15 @@ switch ($path) {
     case '/':
     case '/landing':
     case '/landing-page':
-        require_once __DIR__ . '/../frontend/pages/landing-page/index.php';
+        require_once __DIR__ . '/modules/landing-page/index.php';
         break;
 
     case '/login':
-        require_once __DIR__ . '/../frontend/pages/role-based-login/login.php';
+        require_once __DIR__ . '/modules/role-based-login/login.php';
         break;
 
     case '/forgot-password':
-        require_once __DIR__ . '/../frontend/pages/role-based-login/forgot-password.php';
+        require_once __DIR__ . '/modules/role-based-login/forgot-password.php';
         break;
 
     case '/logout':
@@ -48,36 +48,36 @@ switch ($path) {
 
     case '/dashboard/super-admin':
         checkRole('super_admin', $basePath);
-        require_once __DIR__ . '/../frontend/pages/super-admin-dashboard/dashboard.php';
+        require_once __DIR__ . '/modules/super-admin-dashboard/dashboard.php';
         break;
 
     case '/dashboard/ngo-admin':
         checkRole('ngo_admin', $basePath);
-        require_once __DIR__ . '/../frontend/pages/ngo-admin-dashboard/dashboard.php';
+        require_once __DIR__ . '/modules/ngo-admin-dashboard/dashboard.php';
         break;
 
     case '/dashboard/volunteer':
         checkRole('volunteer', $basePath);
-        require_once __DIR__ . '/../frontend/pages/volunteer-dashboard/dashboard.php';
+        require_once __DIR__ . '/modules/volunteer-dashboard/dashboard.php';
         break;
 
     case '/dashboard/donor':
         checkRole('donor', $basePath);
-        require_once __DIR__ . '/../frontend/pages/donor-dashboard/dashboard.php';
+        require_once __DIR__ . '/modules/donor-dashboard/dashboard.php';
         break;
 
     case '/dashboard/event-coordinator':
         checkRole('event_coordinator', $basePath);
-        require_once __DIR__ . '/../frontend/pages/event-coordinator-dashboard/dashboard.php';
+        require_once __DIR__ . '/modules/event-coordinator-dashboard/dashboard.php';
         break;
 
     default:
         // Handle API or assets or 404
         if (strpos($path, '/api/') === 0) {
-            require_once __DIR__ . '/../backend/routes/api.php';
+            require_once __DIR__ . '/api/api.php';
         } else {
             // Default fallback
-            require_once __DIR__ . '/../frontend/pages/landing-page/index.php';
+            require_once __DIR__ . '/modules/landing-page/index.php';
         }
         break;
 }

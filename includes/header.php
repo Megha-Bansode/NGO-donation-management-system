@@ -46,7 +46,7 @@ function getDashboardUrl($role, $basePath) {
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     
     <!-- Custom Design System & Main Stylesheet -->
-    <link rel="stylesheet" href="<?php echo $basePath; ?>public/css/style.css">
+    <link rel="stylesheet" href="<?php echo $basePath; ?>assets/css/style.css">
 </head>
 <body>
 

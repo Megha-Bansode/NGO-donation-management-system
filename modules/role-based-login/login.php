@@ -22,7 +22,7 @@ if (isset($_SESSION['user'])) {
     }
 }
 
-require_once __DIR__ . '/../../../backend/controllers/AuthController.php';
+require_once __DIR__ . '/../../api/controllers/AuthController.php';
 use Backend\Controllers\AuthController;
 
 $error = '';
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = "Role-Based Login";
-include __DIR__ . '/../../components/header.php';
+include __DIR__ . '/../../includes/header.php';
 ?>
 
 <div class="auth-page">
@@ -244,4 +244,4 @@ function validateLoginForm(event) {
 }
 </script>
 
-<?php include __DIR__ . '/../../components/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

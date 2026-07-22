@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Arohan Foundation - Empowering Lives, Building Sustainable Futures";
-include __DIR__ . '/../../components/header.php';
+include __DIR__ . '/../../includes/header.php';
 ?>
 
 <!-- ==========================================
@@ -644,5 +644,5 @@ function handleContactSubmit(e) {
 </script>
 
 <?php
-include __DIR__ . '/../../components/footer.php';
+include __DIR__ . '/../../includes/footer.php';
 ?>

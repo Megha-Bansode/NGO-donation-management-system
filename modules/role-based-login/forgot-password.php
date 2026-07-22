@@ -10,7 +10,7 @@ if (!isset($basePath)) {
     $basePath = rtrim($baseDir, '/') . '/';
 }
 
-require_once __DIR__ . '/../../../backend/controllers/AuthController.php';
+require_once __DIR__ . '/../../api/controllers/AuthController.php';
 use Backend\Controllers\AuthController;
 
 $error = '';
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = "Forgot Password";
-include __DIR__ . '/../../components/header.php';
+include __DIR__ . '/../../includes/header.php';
 ?>
 
 <div class="auth-page" style="justify-content: center; align-items: center; padding: 40px; background-color: var(--bg-main);">
@@ -91,4 +91,4 @@ function validateForgotForm(event) {
 }
 </script>
 
-<?php include __DIR__ . '/../../components/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

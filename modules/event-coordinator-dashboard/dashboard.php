@@ -4,12 +4,12 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $pageTitle = "Event Coordinator Dashboard";
-include __DIR__ . '/../../components/header.php';
+include __DIR__ . '/../../includes/header.php';
 ?>
 
 <div class="dashboard-wrapper">
     <!-- Sidebar Component -->
-    <?php include __DIR__ . '/../../components/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 
     <!-- Main Content Pane -->
     <main class="dashboard-main">
@@ -130,4 +130,4 @@ include __DIR__ . '/../../components/header.php';
     </main>
 </div>
 
-<?php include __DIR__ . '/../../components/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

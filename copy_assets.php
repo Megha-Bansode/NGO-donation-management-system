@@ -1,8 +1,7 @@
 <?php
 $brainDir = 'C:/Users/Admin/.gemini/antigravity-ide/brain/b1b8e0cc-a9c4-43ce-8746-4176d32f7e65';
 $targetDirs = [
-    __DIR__ . '/assets/images',
-    __DIR__ . '/public/assets/images'
+    __DIR__ . '/assets/images'
 ];
 
 foreach ($targetDirs as $dir) {
