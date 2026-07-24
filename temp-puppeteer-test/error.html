@@ -1,0 +1,802 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Dashboard | Arohan Foundation</title>
+    
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Dashboard Core CSS -->
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    
+    <!-- Premium Sidebar -->
+    <!-- Mobile Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <a href="index.php" class="sidebar-logo">
+            <img src="assets/images/logo/arohan-logo.jpeg" alt="Arohan Logo">
+            <span>Arohan Foundation</span>
+        </a>
+    </div>
+
+    <div class="sidebar-menu">
+                    <div class="menu-group">
+                <div class="menu-label">Main</div>
+                                <a href="admin_dashboard.php" class="menu-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin_donations.php" class="menu-item ">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>Donations</span>
+                </a>
+                <a href="admin_campaigns.php" class="menu-item ">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Campaigns</span>
+                </a>
+            </div>
+
+            <div class="menu-group">
+                <div class="menu-label">Community</div>
+                <a href="admin_events.php" class="menu-item ">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Events</span>
+                </a>
+                <a href="admin_volunteers.php" class="menu-item ">
+                    <i class="fas fa-users"></i>
+                    <span>Volunteers</span>
+                </a>
+                            </div>
+            
+                            <div class="menu-group">
+                    <div class="menu-label">System</div>
+                    <a href="admin_users.php" class="menu-item ">
+                        <i class="fas fa-user-shield"></i>
+                        <span>User Management</span>
+                    </a>
+                    <a href="admin_reports.php" class="menu-item ">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Reports</span>
+                    </a>
+                    <a href="admin_notifications.php" class="menu-item ">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                    <a href="admin_settings.php" class="menu-item ">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            
+        
+        <div class="menu-group" style="margin-top: auto; padding-top: 20px;">
+            <a href="logout.php" class="menu-item" style="color: var(--danger);">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</aside>
+
+    <main class="main-content">
+        <!-- Sticky Topbar -->
+        <header class="topbar">
+    <div class="topbar-left">
+        <button class="toggle-sidebar" id="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search campaigns, donors...">
+        </div>
+    </div>
+    
+    <div class="topbar-right">
+        <div class="action-btn" style="position: relative;" data-toggle="dropdown" data-target="notification-dropdown">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+            
+            <div class="dropdown-menu" id="notification-dropdown" style="right: -10px; width: 300px;">
+                <div class="dropdown-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Notifications</span>
+                    <a href="#" style="font-size: 0.75rem; color: var(--primary); text-decoration: none;">Mark all read</a>
+                </div>
+                <a href="#" class="dropdown-item">
+                    <div style="width: 32px; height: 32px; background: rgba(16,185,129,0.1); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <div style="line-height: 1.3;">
+                        <span style="font-size: 0.85rem; font-weight: 600; display: block; color: var(--text-dark);">New Donation</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">John Doe donated $500</span>
+                    </div>
+                </a>
+                <a href="#" class="dropdown-item">
+                    <div style="width: 32px; height: 32px; background: rgba(59,130,246,0.1); color: var(--info); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div style="line-height: 1.3;">
+                        <span style="font-size: 0.85rem; font-weight: 600; display: block; color: var(--text-dark);">New Volunteer</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Sarah joined your campaign</span>
+                    </div>
+                </a>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid rgba(0,0,0,0.05);">
+                    <a href="#" style="font-size: 0.8rem; font-weight: 600; color: var(--primary); text-decoration: none;">View All</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-btn">
+            <i class="fas fa-envelope"></i>
+        </div>
+        
+        <div class="action-btn user-avatar" style="border: none; background: var(--primary); color: white;" data-toggle="dropdown" data-target="user-dropdown-topbar">
+            U            <div class="dropdown-menu" id="user-dropdown-topbar" style="top: calc(100% + 15px);">
+                <div class="dropdown-header">
+                    <div style="font-weight: 700; color: var(--text-dark);">User</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;"></div>
+                </div>
+                                    <a href="admin_settings.php" class="dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Preferences</a>
+                <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 5px 0;"></div>
+                <a href="logout.php" class="dropdown-item" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="page-content">
+            <!-- Header Section -->
+            <div class="page-header">
+                <div class="page-title">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 5px;">Welcome Back,</p>
+                    <h1>Super Administrator</h1>
+                    <div class="breadcrumb" style="margin-top: 5px;">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span>Friday, July 24, 2026</span>
+                        <span style="margin: 0 8px;">•</span>
+                        <i class="far fa-clock"></i>
+                        <span>05:27 AM</span>
+                    </div>
+                </div>
+                <div class="page-actions" style="display: flex; gap: 10px;">
+                    <button class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);"><i class="fas fa-file-download"></i> Generate Reports</button>
+                    <button class="btn-primary"><i class="fas fa-plus"></i> Create Campaign</button>
+                </div>
+            </div>
+
+            <!-- KPI Cards Section -->
+            <div class="kpi-grid">
+                
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Total NGOs</span>
+            <div class="kpi-icon"><i class="fas fa-building"></i></div>
+        </div>
+        <div class="kpi-value" data-target="2">2</div>
+        <div class="kpi-trend trend-up">
+            <i class="fas fa-arrow-up"></i>
+            <span>Registered Organizations</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Total Users</span>
+            <div class="kpi-icon"><i class="fas fa-users"></i></div>
+        </div>
+        <div class="kpi-value" data-target="17">17</div>
+        <div class="kpi-trend trend-up">
+            <i class="fas fa-arrow-up"></i>
+            <span>Active Accounts</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Total Donations</span>
+            <div class="kpi-icon"><i class="fas fa-hand-holding-heart"></i></div>
+        </div>
+        <div class="kpi-value" data-target="14">14</div>
+        <div class="kpi-trend trend-up">
+            <i class="fas fa-arrow-up"></i>
+            <span>Successful Transactions</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Amount Raised</span>
+            <div class="kpi-icon"><i class="fas fa-dollar-sign"></i></div>
+        </div>
+        <div class="kpi-value" data-target="$15,800">$15,800</div>
+        <div class="kpi-trend trend-up">
+            <i class="fas fa-arrow-up"></i>
+            <span>Total Funds</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Active Campaigns</span>
+            <div class="kpi-icon"><i class="fas fa-bullhorn"></i></div>
+        </div>
+        <div class="kpi-value" data-target="3">3</div>
+        <div class="kpi-trend trend-neutral">
+            <i class="fas fa-arrow-minus"></i>
+            <span>Currently Running</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Volunteers</span>
+            <div class="kpi-icon"><i class="fas fa-hands-helping"></i></div>
+        </div>
+        <div class="kpi-value" data-target="6">6</div>
+        <div class="kpi-trend trend-up">
+            <i class="fas fa-arrow-up"></i>
+            <span>Ready to help</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Events</span>
+            <div class="kpi-icon"><i class="far fa-calendar-check"></i></div>
+        </div>
+        <div class="kpi-value" data-target="4">4</div>
+        <div class="kpi-trend trend-neutral">
+            <i class="fas fa-arrow-minus"></i>
+            <span>Upcoming/Ongoing</span>
+        </div>
+    </div>
+    
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Pending Approvals</span>
+            <div class="kpi-icon"><i class="fas fa-clipboard-check"></i></div>
+        </div>
+        <div class="kpi-value" data-target="1">1</div>
+        <div class="kpi-trend trend-down">
+            <i class="fas fa-arrow-down"></i>
+            <span>Action Required</span>
+        </div>
+    </div>
+                </div>
+
+            <!-- Charts Section -->
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <div class="glass-card" style="flex: 2; min-width: 500px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Monthly Donations</h3>
+                    </div>
+                    <div style="height: 300px; width: 100%;">
+                        <canvas id="donationsChart" width="549" height="300" style="display: block; box-sizing: border-box; height: 300px; width: 549.3px;"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card" style="flex: 1; min-width: 300px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                    </div>
+                    <div class="activity-feed" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
+                                                    <p style="text-align:center; color: var(--text-muted); margin-top: 2rem;">No recent activity.</p>
+                                            </div>
+                </div>
+            </div>
+
+            <!-- Complex Data Tables Row -->
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                
+                <!-- Recent Donations -->
+                <div class="glass-card" style="flex: 2; min-width: 600px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Donations</h3>
+                        <button class="btn-primary" style="padding: 6px 15px; font-size: 0.8rem; background: rgba(124,154,134,0.1); color: var(--primary);">View All</button>
+                    </div>
+                    
+                                            <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Campaign</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Diana Donor</strong></td>
+                                        <td>Women Empowerment Project</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$600.00</td>
+                                        <td>Sep 15, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Alice Donor</strong></td>
+                                        <td>Women Empowerment Project</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$100.00</td>
+                                        <td>Sep 10, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Bob Donor</strong></td>
+                                        <td>Women Empowerment Project</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$300.00</td>
+                                        <td>Sep 05, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Charlie Donor</strong></td>
+                                        <td>Disaster Relief Fund</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$500.00</td>
+                                        <td>Aug 25, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Diana Donor</strong></td>
+                                        <td>Disaster Relief Fund</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$750.00</td>
+                                        <td>Aug 20, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Alice Donor</strong></td>
+                                        <td>Disaster Relief Fund</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$200.00</td>
+                                        <td>Aug 16, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Edward Donor</strong></td>
+                                        <td>Disaster Relief Fund</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$5,000.00</td>
+                                        <td>Aug 15, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Bob Donor</strong></td>
+                                        <td>Clean Water Initiative</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$250.00</td>
+                                        <td>Jul 20, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-pending">Pending</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Edward Donor</strong></td>
+                                        <td>Education for All</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$1,200.00</td>
+                                        <td>May 10, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Diana Donor</strong></td>
+                                        <td>Education for All</td>
+                                        <td style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);">$150.00</td>
+                                        <td>Apr 10, 2026</td>
+                                        <td>
+                                                                                        <span class="status-badge status-active">Completed</span>
+                                        </td>
+                                    </tr>
+                                                                    </tbody>
+                            </table>
+                        </div>
+                                    </div>
+
+                <!-- Recent Users -->
+                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Users</h3>
+                    </div>
+                    
+                                            <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">pratik rahane</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">pratikrahane66@gmail.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Super Admin</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Edward Donor</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">edward@example.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Donor</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Diana Donor</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">diana@example.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Donor</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Charlie Donor</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">charlie@example.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Donor</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Bob Donor</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">bob@example.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Donor</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Alice Donor</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">alice@example.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Donor</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Michael Wilson (Coordinator)</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">michael@ngosystem.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Event Coordinator</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Emily Davis (Coordinator)</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">emily@ngosystem.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">Event Coordinator</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Robert Johnson (NGO Admin)</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">robert@ngosystem.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">NGO Admin</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                        <tr>
+                                        <td>
+                                            <strong style="color: var(--text-dark); display:block;">Jane Smith (NGO Admin)</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">jane@ngosystem.com</span>
+                                        </td>
+                                        <td><span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);">NGO Admin</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                Active                                            </span>
+                                        </td>
+                                    </tr>
+                                                                    </tbody>
+                            </table>
+                        </div>
+                                    </div>
+            </div>
+
+            <!-- Third Row: Campaigns and Events -->
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                <!-- Latest Campaigns -->
+                <div class="glass-card" style="flex: 1; min-width: 500px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Latest Campaigns</h3>
+                    </div>
+                                            <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Campaign Name</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Clean Water Initiative</strong></td>
+                                        <td style="width: 40%;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600;">
+                                                <span style="color: var(--primary);">$15,000</span>
+                                                <span style="color: var(--text-muted);">$50,000</span>
+                                            </div>
+                                            <div style="height: 6px; width: 100%; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--primary); width: 30.00%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge status-active">Active</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Education for All</strong></td>
+                                        <td style="width: 40%;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600;">
+                                                <span style="color: var(--primary);">$25,000</span>
+                                                <span style="color: var(--text-muted);">$25,000</span>
+                                            </div>
+                                            <div style="height: 6px; width: 100%; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--primary); width: 100.00%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge status-pending">Completed</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Disaster Relief Fund</strong></td>
+                                        <td style="width: 40%;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600;">
+                                                <span style="color: var(--primary);">$45,001</span>
+                                                <span style="color: var(--text-muted);">$100,000</span>
+                                            </div>
+                                            <div style="height: 6px; width: 100%; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--primary); width: 45.00%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge status-active">Active</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Women Empowerment Project</strong></td>
+                                        <td style="width: 40%;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600;">
+                                                <span style="color: var(--primary);">$5,000</span>
+                                                <span style="color: var(--text-muted);">$30,000</span>
+                                            </div>
+                                            <div style="height: 6px; width: 100%; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--primary); width: 16.67%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge status-active">Active</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Winter Blanket Drive</strong></td>
+                                        <td style="width: 40%;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600;">
+                                                <span style="color: var(--primary);">$0</span>
+                                                <span style="color: var(--text-muted);">$10,000</span>
+                                            </div>
+                                            <div style="height: 6px; width: 100%; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--primary); width: 0.00%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge status-pending">Draft</span></td>
+                                    </tr>
+                                                                    </tbody>
+                            </table>
+                        </div>
+                                    </div>
+
+                <!-- Upcoming Events -->
+                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Upcoming Events</h3>
+                    </div>
+                                            <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Event Name</th>
+                                        <th>Date &amp; Time</th>
+                                        <th>Venue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">River Cleaning Drive</strong></td>
+                                        <td>
+                                            <div style="font-size: 0.85rem; color: var(--text-dark); font-weight: 600;">Oct 15, 2026</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-muted);">8:00 AM</div>
+                                        </td>
+                                        <td><span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> City River Bank</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Food Distribution Camp</strong></td>
+                                        <td>
+                                            <div style="font-size: 0.85rem; color: var(--text-dark); font-weight: 600;">Nov 20, 2026</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-muted);">10:00 AM</div>
+                                        </td>
+                                        <td><span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> Community Hall 1</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Orphanage Visit</strong></td>
+                                        <td>
+                                            <div style="font-size: 0.85rem; color: var(--text-dark); font-weight: 600;">Nov 25, 2026</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-muted);">2:00 PM</div>
+                                        </td>
+                                        <td><span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> Hope Orphanage</span></td>
+                                    </tr>
+                                                                        <tr>
+                                        <td><strong style="color: var(--text-dark);">Blood Donation Camp</strong></td>
+                                        <td>
+                                            <div style="font-size: 0.85rem; color: var(--text-dark); font-weight: 600;">Dec 05, 2026</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-muted);">9:00 AM</div>
+                                        </td>
+                                        <td><span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> City Hospital</span></td>
+                                    </tr>
+                                                                    </tbody>
+                            </table>
+                        </div>
+                                    </div>
+            </div>
+
+            <!-- Fourth Row: Communications -->
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+                
+                <!-- Unread Notifications -->
+                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Unread Notifications</h3>
+                    </div>
+                    
+    <div class="glass-card empty-state">
+        <div class="empty-icon"><i class="far fa-bell-slash"></i></div>
+        <h3>All caught up!</h3>
+        <p>You have no unread notifications.</p>
+    </div>                </div>
+
+                <!-- Contact Requests -->
+                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                    <div class="card-header">
+                        <h3 class="card-title">Latest Contact Requests</h3>
+                    </div>
+                    
+    <div class="glass-card empty-state">
+        <div class="empty-icon"><i class="far fa-envelope"></i></div>
+        <h3>Inbox Empty</h3>
+        <p>No pending contact requests at this time.</p>
+    </div>                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Dashboard Interactive Logic -->
+<script src="assets/js/dashboard.js"></script>
+
+<!-- Chart.js Initialization -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('donationsChart');
+    if (ctx) {
+        const labels = ["Mar 2026","Apr 2026","May 2026","Aug 2026","Sep 2026"];
+        const amounts = [3000,4150,1200,6450,1000];
+        
+        // If no data, provide a nice empty state placeholder chart
+        if (labels.length === 0) {
+            labels.push('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun');
+            amounts.push(0, 0, 0, 0, 0, 0);
+        }
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Donations ($)',
+                    data: amounts,
+                    borderColor: '#7C9A86',
+                    backgroundColor: 'rgba(124, 154, 134, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#7C9A86',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1F2937',
+                        bodyColor: '#4B5563',
+                        borderColor: 'rgba(0,0,0,0.05)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: "'Manrope', sans-serif" }, color: '#9CA3AF' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(0,0,0,0.03)', drawBorder: false },
+                        ticks: { 
+                            font: { family: "'Space Grotesk', sans-serif" }, 
+                            color: '#9CA3AF',
+                            callback: function(value) { return '$' + value; }
+                        },
+                        beginAtZero: true
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+            }
+        });
+    }
+});
+</script>
+
+
+
+</body></html>
