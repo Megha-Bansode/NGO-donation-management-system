@@ -1,2 +1,0 @@
-﻿<?php
-// NGO Admin Service

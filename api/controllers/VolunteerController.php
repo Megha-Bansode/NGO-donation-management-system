@@ -1,2 +1,0 @@
-﻿<?php
-// Volunteer Controller

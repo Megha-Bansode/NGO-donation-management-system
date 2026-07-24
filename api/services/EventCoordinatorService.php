@@ -1,2 +1,0 @@
-﻿<?php
-// Event Coordinator Service
