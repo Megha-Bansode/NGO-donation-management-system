@@ -162,6 +162,7 @@ try {
             font-family: var(--font-body);
             background: white;
             min-width: 200px;
+            font-size: 0.9rem;
         }
         .filter-bar input:focus, .filter-bar select:focus {
             outline: none;
@@ -196,7 +197,7 @@ try {
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(6px);
             z-index: 1050;
             display: flex;
@@ -212,13 +213,13 @@ try {
         }
         .modal-content {
             background: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 16px;
             width: 100%;
             max-width: 700px;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-lg);
             transform: scale(0.95);
             transition: all 0.3s ease;
         }
@@ -235,16 +236,21 @@ try {
         }
         .modal-header h3 {
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-dark);
         }
         .modal-close {
             background: none;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             cursor: pointer;
+            transition: color 0.2s;
         }
+        .modal-close:hover {
+            color: var(--danger);
+        }
+        
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -258,7 +264,7 @@ try {
         }
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: 600;
             font-size: 0.9rem;
             color: var(--text-dark);
@@ -270,6 +276,11 @@ try {
             border-radius: 8px;
             background: white;
             font-family: var(--font-body);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
         }
         .form-group textarea {
             resize: vertical;
@@ -288,6 +299,17 @@ try {
             height: 100%;
             background: var(--primary);
             border-radius: 4px;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 30px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -405,21 +427,24 @@ try {
                                             <span style="color: var(--text-muted);"><i class="far fa-star"></i></span>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
-                                        <div style="display: flex; gap: 8px;">
-                                            <button onclick='openCampaignModal(<?php echo json_encode($camp); ?>)' class="action-btn" style="width: 32px; height: 32px;" title="Edit Campaign">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <form method="POST" action="admin_campaigns.php" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this campaign?');">
-                                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                                <input type="hidden" name="action" value="delete_campaign">
-                                                <input type="hidden" name="id" value="<?php echo $camp['id']; ?>">
-                                                <button type="submit" class="action-btn" style="width: 32px; height: 32px; color: var(--danger);" title="Delete Campaign">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                                    <td style="text-align: right;">
+                                         <div style="display: inline-flex; gap: 5px;">
+                                             <button onclick='openViewModal(<?php echo json_encode($camp); ?>)' class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(124,154,134,0.1); color: var(--primary); border: none;" title="View Details">
+                                                 <i class="far fa-eye"></i> Details
+                                             </button>
+                                             <button onclick='openCampaignModal(<?php echo json_encode($camp); ?>)' class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(0,0,0,0.05); color: var(--text-dark); border: none;" title="Edit Campaign">
+                                                 <i class="fas fa-edit"></i> Edit
+                                             </button>
+                                             <form method="POST" action="admin_campaigns.php" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this campaign?');">
+                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                                 <input type="hidden" name="action" value="delete_campaign">
+                                                 <input type="hidden" name="id" value="<?php echo $camp['id']; ?>">
+                                                 <button type="submit" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(239,68,68,0.1); color: var(--danger); border: none;" title="Delete Campaign">
+                                                     <i class="fas fa-trash"></i>
+                                                 </button>
+                                             </form>
+                                         </div>
+                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -514,15 +539,74 @@ try {
             </div>
             
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                <button type="button" class="btn-primary" style="background: rgba(0,0,0,0.05); color: var(--text-dark);" onclick="closeCampaignModal()">Cancel</button>
+                <button type="button" class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);" onclick="closeCampaignModal()">Cancel</button>
                 <button type="submit" class="btn-primary">Save Campaign</button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Modal: View Campaign Details -->
+<div class="modal" id="viewCampaignModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="view_camp_title">Campaign Details</h3>
+            <button class="modal-close" onclick="closeModal('viewCampaignModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="profile-grid" style="margin-bottom: 20px;">
+            <div class="profile-field">
+                <div class="profile-label">Campaign Name</div>
+                <div class="profile-val" id="view_camp_name" style="font-weight: 700;"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Category</div>
+                <div class="profile-val" id="view_camp_category"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Target Goal</div>
+                <div class="profile-val" id="view_camp_target" style="font-family: var(--font-stats); font-weight: 700; color: var(--primary);"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Amount Raised</div>
+                <div class="profile-val" id="view_camp_collected" style="font-family: var(--font-stats); font-weight: 700; color: var(--success);"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Start Date</div>
+                <div class="profile-val" id="view_camp_start"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">End Date</div>
+                <div class="profile-val" id="view_camp_end"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Status</div>
+                <div class="profile-val" id="view_camp_status"></div>
+            </div>
+            <div class="profile-field">
+                <div class="profile-label">Featured</div>
+                <div class="profile-val" id="view_camp_featured"></div>
+            </div>
+            <div class="profile-field" style="grid-column: span 2;">
+                <div class="profile-label">Short Description</div>
+                <div class="profile-val" id="view_camp_short_desc"></div>
+            </div>
+            <div class="profile-field" style="grid-column: span 2;">
+                <div class="profile-label">Full Description</div>
+                <div class="profile-val" id="view_camp_desc" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary); line-height: 1.5; font-size: 0.9rem; white-space: pre-wrap;"></div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;">
+            <button class="btn-primary" onclick="closeModal('viewCampaignModal')" style="background: var(--text-muted); padding: 8px 20px;">Close Details</button>
+        </div>
+    </div>
+</div>
+
 <script src="assets/js/dashboard.js"></script>
 <script>
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
     function openCampaignModal(campaign = null) {
         if (campaign) {
             document.getElementById('modalTitle').innerText = 'Edit Campaign';
@@ -557,6 +641,30 @@ try {
     
     function closeCampaignModal() {
         document.getElementById('campaignModal').classList.remove('active');
+    }
+
+    function openViewModal(campaign) {
+        document.getElementById('view_camp_title').innerText = campaign.name;
+        document.getElementById('view_camp_name').innerText = campaign.name;
+        document.getElementById('view_camp_category').innerText = campaign.category_name || 'Uncategorized';
+        document.getElementById('view_camp_target').innerText = '₹' + parseFloat(campaign.target_amount).toLocaleString('en-IN');
+        document.getElementById('view_camp_collected').innerText = '₹' + parseFloat(campaign.collected_amount).toLocaleString('en-IN');
+        document.getElementById('view_camp_start').innerText = new Date(campaign.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        document.getElementById('view_camp_end').innerText = new Date(campaign.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        
+        const statusElement = document.getElementById('view_camp_status');
+        statusElement.innerText = campaign.status.toUpperCase();
+        statusElement.className = 'badge';
+        if (campaign.status === 'active') statusElement.style.cssText = 'background: rgba(16,185,129,0.1); color: var(--success);';
+        else if (campaign.status === 'draft') statusElement.style.cssText = 'background: rgba(107,114,128,0.1); color: var(--text-muted);';
+        else if (campaign.status === 'completed') statusElement.style.cssText = 'background: rgba(59,130,246,0.1); color: #3b82f6;';
+        else statusElement.style.cssText = 'background: rgba(239,68,68,0.1); color: var(--danger);';
+        
+        document.getElementById('view_camp_featured').innerText = campaign.featured == 1 ? 'YES' : 'NO';
+        document.getElementById('view_camp_short_desc').innerText = campaign.short_description || 'N/A';
+        document.getElementById('view_camp_desc').innerText = campaign.description;
+        
+        document.getElementById('viewCampaignModal').classList.add('active');
     }
 </script>
 </body>
