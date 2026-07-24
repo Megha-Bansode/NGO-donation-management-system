@@ -60,30 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error_msg = "Please fill in all required fields.";
             }
-        } elseif ($action === 'create_event') {
-            $title = htmlspecialchars(trim($_POST['title']));
-            $event_type = htmlspecialchars(trim($_POST['event_type']));
-            $venue = htmlspecialchars(trim($_POST['venue']));
-            $event_date = $_POST['event_date'];
-            $event_time = $_POST['event_time'];
-            $registration_deadline = $_POST['registration_deadline'] ?: null;
-            $max_volunteers = filter_var($_POST['max_volunteers'], FILTER_VALIDATE_INT) ?: 0;
-            $expected_budget = filter_var($_POST['expected_budget'], FILTER_VALIDATE_FLOAT) ?: 0;
-            $status = $_POST['status'];
-            $description = htmlspecialchars(trim($_POST['description']));
-            $coordinator_id = $_SESSION['user_id'];
-
-            if ($title && $venue && $event_date && $event_time) {
-                try {
-                    $stmt = $pdo->prepare("INSERT INTO events (title, description, event_type, venue, event_date, event_time, registration_deadline, max_volunteers, expected_budget, status, coordinator_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                    $stmt->execute([$title, $description, $event_type, $venue, $event_date, $event_time, $registration_deadline, $max_volunteers, $expected_budget, $status, $coordinator_id]);
-                    $success_msg = "Event created successfully.";
-                } catch (PDOException $e) {
-                    $error_msg = "Database error: " . $e->getMessage();
-                }
-            } else {
-                $error_msg = "Please fill in all required fields.";
-            }
         }
     }
 }
@@ -344,9 +320,6 @@ try {
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn-primary" onclick="openEventModal()">
-                        <i class="fas fa-plus"></i> Create Event
-                    </button>
                 </div>
             </div>
 
@@ -575,23 +548,7 @@ try {
 <script src="assets/js/dashboard.js"></script>
 <script>
     function openEventModal(event = null) {
-        if (!event) {
-            document.getElementById('modalTitle').textContent = 'Create Event';
-            document.getElementById('formAction').value = 'create_event';
-            document.getElementById('evt_id').value = '';
-            document.getElementById('evt_title').value = '';
-            document.getElementById('evt_type').value = '';
-            document.getElementById('evt_venue').value = '';
-            document.getElementById('evt_date').value = '';
-            document.getElementById('evt_time').value = '';
-            document.getElementById('evt_max').value = '';
-            document.getElementById('evt_desc').value = '';
-            document.getElementById('evt_deadline').value = '';
-            document.getElementById('evt_budget').value = '';
-            document.getElementById('evt_status').value = 'upcoming';
-            document.getElementById('eventModal').classList.add('active');
-            return;
-        }
+        if (!event) return;
         
         document.getElementById('modalTitle').textContent = 'Edit Event';
         document.getElementById('formAction').value = 'edit_event';

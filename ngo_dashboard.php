@@ -39,6 +39,8 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <!-- NGO Admin Custom CSS -->
+    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -65,7 +67,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn-primary" onclick="window.location.href='ngo_campaigns.php'">
+                    <button class="btn-primary ngo-btn-transition" onclick="window.location.href='ngo_campaigns.php'">
                         <i class="fas fa-plus"></i> New Campaign
                     </button>
                 </div>
@@ -73,7 +75,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
 
             <!-- KPI Cards Section -->
             <div class="kpi-grid">
-                <div class="stat-card">
+                <div class="stat-card ngo-hover-card">
                     <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                         <i class="fas fa-hand-holding-heart"></i>
                     </div>
@@ -82,7 +84,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                         <p>Total Raised</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card ngo-hover-card">
                     <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
                         <i class="fas fa-bullhorn"></i>
                     </div>
@@ -91,7 +93,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                         <p>Active Campaigns</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card ngo-hover-card">
                     <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--info);">
                         <i class="fas fa-users"></i>
                     </div>
@@ -100,7 +102,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                         <p>Volunteers</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card ngo-hover-card">
                     <div class="stat-icon" style="background: rgba(236, 72, 153, 0.1); color: var(--danger);">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
@@ -113,7 +115,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
 
             <!-- Charts Section -->
             <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
-                <div class="glass-card" style="flex: 2; min-width: 500px;">
+                <div class="glass-card ngo-hover-card" style="flex: 2; min-width: 500px;">
                     <div class="card-header">
                         <h3 class="card-title">Monthly Donations</h3>
                     </div>
@@ -121,7 +123,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                         <canvas id="donationsChart"></canvas>
                     </div>
                 </div>
-                <div class="glass-card" style="flex: 1; min-width: 300px;">
+                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 300px;">
                     <div class="card-header">
                         <h3 class="card-title">Recent Activity</h3>
                     </div>
@@ -151,7 +153,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
             <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
                 
                 <!-- Recent Donations -->
-                <div class="glass-card" style="flex: 2; min-width: 600px;">
+                <div class="glass-card ngo-hover-card" style="flex: 2; min-width: 600px;">
                     <div class="card-header">
                         <h3 class="card-title">Recent Donations</h3>
                         <button class="btn-primary" style="padding: 6px 15px; font-size: 0.8rem; background: rgba(124,154,134,0.1); color: var(--primary);">View All</button>
@@ -180,11 +182,11 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                                         <td><?php echo date('M d, Y', strtotime($donation['donation_date'])); ?></td>
                                         <td>
                                             <?php 
-                                            $statusClass = 'status-inactive';
-                                            if ($donation['payment_status'] == 'completed') $statusClass = 'status-active';
-                                            if ($donation['payment_status'] == 'pending') $statusClass = 'status-pending';
+                                            $badgeClass = 'ngo-badge-inactive';
+                                            if ($donation['payment_status'] == 'completed') $badgeClass = 'ngo-badge-completed';
+                                            if ($donation['payment_status'] == 'pending') $badgeClass = 'ngo-badge-pending';
                                             ?>
-                                            <span class="status-badge <?php echo $statusClass; ?>"><?php echo ucfirst($donation['payment_status']); ?></span>
+                                            <span class="ngo-badge <?php echo $badgeClass; ?>"><?php echo ucfirst($donation['payment_status']); ?></span>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -200,7 +202,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
             <!-- Third Row: Campaigns and Events -->
             <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
                 <!-- Latest Campaigns -->
-                <div class="glass-card" style="flex: 1; min-width: 500px;">
+                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 500px;">
                     <div class="card-header">
                         <h3 class="card-title">Latest Campaigns</h3>
                     </div>
@@ -229,7 +231,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                                                 <div style="height: 100%; background: var(--primary); width: <?php echo htmlspecialchars($camp['goal_completed_percentage']); ?>%;"></div>
                                             </div>
                                         </td>
-                                        <td><span class="status-badge <?php echo $camp['status'] == 'active' ? 'status-active' : 'status-pending'; ?>"><?php echo ucfirst($camp['status']); ?></span></td>
+                                        <td><span class="ngo-badge <?php echo $camp['status'] == 'active' ? 'ngo-badge-active' : 'ngo-badge-pending'; ?>"><?php echo ucfirst($camp['status']); ?></span></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -239,7 +241,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                 </div>
 
                 <!-- Upcoming Events -->
-                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 400px;">
                     <div class="card-header">
                         <h3 class="card-title">Upcoming Events</h3>
                     </div>
@@ -277,7 +279,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
             <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
                 
                 <!-- Unread Notifications -->
-                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 400px;">
                     <div class="card-header">
                         <h3 class="card-title">Unread Notifications</h3>
                     </div>
@@ -307,7 +309,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                 </div>
 
                 <!-- Contact Requests -->
-                <div class="glass-card" style="flex: 1; min-width: 400px;">
+                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 400px;">
                     <div class="card-header">
                         <h3 class="card-title">Latest Contact Requests</h3>
                     </div>

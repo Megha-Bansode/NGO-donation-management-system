@@ -146,32 +146,6 @@ try {
     <link rel="stylesheet" href="assets/css/dashboard.css">
     
     <style>
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 10px;
-        }
-        .tab-item {
-            padding: 10px 24px;
-            border-radius: 30px;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            transition: all var(--transition-fast);
-            font-size: 0.95rem;
-        }
-        .tab-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 10px rgba(124, 154, 134, 0.2);
-        }
-        .tab-item:hover:not(.active) {
-            background: rgba(0,0,0,0.04);
-            color: var(--text-dark);
-        }
-        
         .filter-bar {
             display: flex;
             gap: 15px;
@@ -186,14 +160,12 @@ try {
             font-family: var(--font-body);
             background: white;
             min-width: 200px;
-            font-size: 0.9rem;
         }
         .filter-bar input:focus, .filter-bar select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
         }
-        
         .pagination {
             display: flex;
             justify-content: center;
@@ -222,7 +194,7 @@ try {
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(6px);
             z-index: 1050;
             display: flex;
@@ -238,15 +210,13 @@ try {
         }
         .modal-content {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             width: 100%;
-            max-width: 550px;
-            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             transform: scale(0.95);
             transition: all 0.3s ease;
-            max-height: 85vh;
-            overflow-y: auto;
         }
         .modal.active .modal-content {
             transform: scale(1);
@@ -261,80 +231,33 @@ try {
         }
         .modal-header h3 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-dark);
         }
         .modal-close {
             background: none;
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
             cursor: pointer;
-            transition: color 0.2s;
         }
-        .modal-close:hover {
-            color: var(--danger);
-        }
-        
         .form-group {
             margin-bottom: 15px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 600;
             font-size: 0.9rem;
             color: var(--text-dark);
         }
-        .form-group select, .form-group input {
+        .form-group select {
             width: 100%;
             padding: 10px 15px;
             border: 1px solid rgba(0,0,0,0.1);
             border-radius: 8px;
             background: white;
             font-family: var(--font-body);
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
-        }
-        
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .profile-field {
-            margin-bottom: 10px;
-        }
-        .profile-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .profile-val {
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            font-weight: 500;
-            margin-top: 2px;
-        }
-        
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: 30px;
-            text-transform: uppercase;
-        }
-        .badge-role {
-            background: rgba(124, 154, 134, 0.1);
-            color: var(--primary);
         }
     </style>
 </head>
@@ -349,13 +272,6 @@ try {
         <?php include __DIR__ . '/includes/dashboard/topbar.php'; ?>
 
         <div class="page-content">
-            
-            <!-- Navigation Tabs -->
-            <div class="tabs-container">
-                <a href="admin_users.php" class="tab-item active">All Users</a>
-                <a href="admin_ngos.php" class="tab-item">NGO Directory</a>
-            </div>
-
             <!-- Header Section -->
             <div class="page-header">
                 <div class="page-title">
@@ -403,9 +319,7 @@ try {
                     </select>
 
                     <button type="submit" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
-                    <?php if ($search !== '' || $role_filter !== '' || $status_filter !== ''): ?>
-                        <a href="admin_users.php" class="btn-primary" style="padding: 10px 20px; background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1); text-decoration: none;"><i class="fas fa-undo"></i> Clear</a>
-                    <?php endif; ?>
+                    <a href="admin_users.php" class="btn-primary" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
                 </form>
             </div>
 
@@ -424,7 +338,7 @@ try {
                                     <th>Role</th>
                                     <th>Status</th>
                                     <th>Joined</th>
-                                    <th style="text-align: right;">Actions</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -432,13 +346,11 @@ try {
                                 <tr>
                                     <td>#<?php echo $u['id']; ?></td>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--text-dark); cursor: pointer;" onclick='openViewModal(<?php echo json_encode($u); ?>)'>
-                                            <?php echo htmlspecialchars($u['full_name']); ?>
-                                        </div>
+                                        <div style="font-weight: 600; color: var(--text-dark);"><?php echo htmlspecialchars($u['full_name']); ?></div>
                                     </td>
                                     <td><?php echo htmlspecialchars($u['email']); ?></td>
                                     <td>
-                                        <span class="badge badge-role">
+                                        <span class="badge" style="background: rgba(124, 154, 134, 0.1); color: var(--primary);">
                                             <?php echo htmlspecialchars($u['role_name']); ?>
                                         </span>
                                     </td>
@@ -458,15 +370,12 @@ try {
                                         </span>
                                     </td>
                                     <td><?php echo date('M d, Y', strtotime($u['created_at'])); ?></td>
-                                    <td style="text-align: right;">
-                                        <div style="display: inline-flex; gap: 5px;">
-                                            <button onclick='openViewModal(<?php echo json_encode($u); ?>)' class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(124,154,134,0.1); color: var(--primary); border: none;" title="View Details">
-                                                <i class="far fa-eye"></i> Details
+                                    <td>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button onclick='openEditModal(<?php echo json_encode($u); ?>)' class="action-btn" style="width: 32px; height: 32px;" title="Edit Role & Status">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                            <button onclick='openEditModal(<?php echo json_encode($u); ?>)' class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(0,0,0,0.05); color: var(--text-dark); border: none;" title="Edit Role & Status">
-                                                <i class="fas fa-edit"></i> Status
-                                            </button>
-                                            <a href="admin_user_activity.php?id=<?php echo $u['id']; ?>" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(0,0,0,0.05); color: var(--text-dark); border: none; text-decoration: none;" title="Activity Logs">
+                                            <a href="admin_user_activity.php?id=<?php echo $u['id']; ?>" class="action-btn" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="View Activity Logs">
                                                 <i class="fas fa-history"></i>
                                             </a>
                                         </div>
@@ -495,59 +404,12 @@ try {
     </main>
 </div>
 
-<!-- Modal: View User Details -->
-<div class="modal" id="viewUserModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>User Details</h3>
-            <button class="modal-close" onclick="closeModal('viewUserModal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="profile-grid">
-            <div class="profile-field">
-                <div class="profile-label">Full Name</div>
-                <div class="profile-val" id="view_full_name"></div>
-            </div>
-            <div class="profile-field">
-                <div class="profile-label">Email Address</div>
-                <div class="profile-val" id="view_email"></div>
-            </div>
-            <div class="profile-field">
-                <div class="profile-label">Phone Number</div>
-                <div class="profile-val" id="view_phone"></div>
-            </div>
-            <div class="profile-field">
-                <div class="profile-label">Role</div>
-                <div class="profile-val" id="view_role"></div>
-            </div>
-            <div class="profile-field">
-                <div class="profile-label">Account Status</div>
-                <div class="profile-val" id="view_status"></div>
-            </div>
-            <div class="profile-field">
-                <div class="profile-label">Date Joined</div>
-                <div class="profile-val" id="view_joined"></div>
-            </div>
-            <div class="profile-field" style="grid-column: 1 / -1;">
-                <div class="profile-label">Address</div>
-                <div class="profile-val" id="view_address"></div>
-            </div>
-            <div class="profile-field" style="grid-column: 1 / -1;">
-                <div class="profile-label">Bio / Profile Info</div>
-                <div class="profile-val" id="view_bio" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary); line-height: 1.5; font-size: 0.9rem;"></div>
-            </div>
-        </div>
-        <div style="display: flex; justify-content: flex-end; margin-top: 15px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;">
-            <button class="btn-primary" onclick="closeModal('viewUserModal')" style="background: var(--text-muted); padding: 8px 20px;">Close Details</button>
-        </div>
-    </div>
-</div>
-
 <!-- Edit User Modal -->
 <div class="modal" id="editUserModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Update User Role & Status</h3>
-            <button class="modal-close" onclick="closeModal('editUserModal')"><i class="fas fa-times"></i></button>
+            <h3>Edit User</h3>
+            <button class="modal-close" onclick="closeEditModal()"><i class="fas fa-times"></i></button>
         </div>
         <form method="POST" action="admin_users.php">
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
@@ -556,7 +418,7 @@ try {
             
             <div class="form-group">
                 <label>User Name</label>
-                <input type="text" id="edit_user_name" readonly style="background: #f9f9f9;">
+                <input type="text" id="edit_user_name" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; font-family: var(--font-body);">
             </div>
             
             <div class="form-group">
@@ -578,8 +440,8 @@ try {
                 </select>
             </div>
             
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;">
-                <button type="button" class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);" onclick="closeModal('editUserModal')">Cancel</button>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button type="button" class="btn-primary" style="background: rgba(0,0,0,0.05); color: var(--text-dark);" onclick="closeEditModal()">Cancel</button>
                 <button type="submit" class="btn-primary">Save Changes</button>
             </div>
         </form>
@@ -588,10 +450,6 @@ try {
 
 <script src="assets/js/dashboard.js"></script>
 <script>
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-    }
-
     function openEditModal(user) {
         document.getElementById('edit_user_id').value = user.id;
         document.getElementById('edit_user_name').value = user.full_name;
@@ -601,33 +459,8 @@ try {
         document.getElementById('editUserModal').classList.add('active');
     }
     
-    function openViewModal(user) {
-        document.getElementById('view_full_name').innerText = user.full_name;
-        document.getElementById('view_email').innerText = user.email;
-        document.getElementById('view_phone').innerText = user.phone || 'N/A';
-        document.getElementById('view_role').innerText = user.role_name || 'User';
-        
-        // Status formatting
-        const statusElement = document.getElementById('view_status');
-        statusElement.innerText = user.status.toUpperCase();
-        statusElement.className = 'badge';
-        if (user.status === 'active') statusElement.style.cssText = 'background: rgba(16,185,129,0.1); color: var(--success);';
-        else if (user.status === 'inactive') statusElement.style.cssText = 'background: rgba(107,114,128,0.1); color: var(--text-muted);';
-        else if (user.status === 'suspended') statusElement.style.cssText = 'background: rgba(245,158,11,0.1); color: var(--warning);';
-        else statusElement.style.cssText = 'background: rgba(239,68,68,0.1); color: var(--danger);';
-        
-        // Date formatting
-        const date = new Date(user.created_at);
-        document.getElementById('view_joined').innerText = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        
-        // Address compilation
-        const address = [user.address, user.city, user.state, user.country, user.postal_code].filter(Boolean).join(', ');
-        document.getElementById('view_address').innerText = address || 'N/A';
-        
-        // Bio
-        document.getElementById('view_bio').innerText = user.bio || 'No profile biography provided.';
-        
-        document.getElementById('viewUserModal').classList.add('active');
+    function closeEditModal() {
+        document.getElementById('editUserModal').classList.remove('active');
     }
 </script>
 </body>

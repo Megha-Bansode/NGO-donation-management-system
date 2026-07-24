@@ -144,7 +144,7 @@ foreach ($monthlyDonations as $md) {
         
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -152,17 +152,11 @@ foreach ($monthlyDonations as $md) {
             background: white;
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .summary-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-light);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
         .summary-icon {
             width: 60px;
@@ -172,15 +166,14 @@ foreach ($monthlyDonations as $md) {
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            flex-shrink: 0;
         }
         
         .chart-container {
             background: white;
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid rgba(0,0,0,0.04);
-            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
             margin-bottom: 25px;
         }
         
@@ -192,13 +185,9 @@ foreach ($monthlyDonations as $md) {
         .data-card {
             background: white;
             border-radius: 16px;
-            border: 1px solid rgba(0,0,0,0.04);
-            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
             overflow: hidden;
-            transition: box-shadow 0.3s ease;
-        }
-        .data-card:hover {
-            box-shadow: var(--shadow-md);
         }
         .data-header {
             padding: 20px;
@@ -251,15 +240,9 @@ foreach ($monthlyDonations as $md) {
                         <span style="color: var(--primary);">Reports</span>
                     </div>
                 </div>
-                <div class="header-actions" style="display: flex; gap: 10px;">
+                <div class="header-actions">
                     <button class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);" onclick="window.print()">
                         <i class="fas fa-print"></i> Print Report
-                    </button>
-                    <button class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);" onclick="triggerExport('PDF')">
-                        <i class="far fa-file-pdf" style="color: var(--danger);"></i> Export PDF
-                    </button>
-                    <button class="btn-primary" style="background: white; color: var(--text-dark); border: 1px solid rgba(0,0,0,0.1);" onclick="triggerExport('Excel')">
-                        <i class="far fa-file-excel" style="color: var(--success);"></i> Export Excel
                     </button>
                 </div>
             </div>
@@ -285,7 +268,7 @@ foreach ($monthlyDonations as $md) {
                     </div>
                     <div>
                         <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Total Donations</div>
-                        <div style="font-family: var(--font-stats); font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-top: 3px;"><?php echo formatIndianCurrency($total_donations); ?></div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);"><?php echo formatIndianCurrency($total_donations); ?></div>
                     </div>
                 </div>
                 <div class="summary-card">
@@ -294,7 +277,7 @@ foreach ($monthlyDonations as $md) {
                     </div>
                     <div>
                         <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Transactions</div>
-                        <div style="font-family: var(--font-stats); font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-top: 3px;"><?php echo number_format($total_transactions); ?></div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);"><?php echo number_format($total_transactions); ?></div>
                     </div>
                 </div>
                 <div class="summary-card">
@@ -303,7 +286,7 @@ foreach ($monthlyDonations as $md) {
                     </div>
                     <div>
                         <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Active Volunteers</div>
-                        <div style="font-family: var(--font-stats); font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-top: 3px;"><?php echo number_format($active_volunteers); ?></div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);"><?php echo number_format($active_volunteers); ?></div>
                     </div>
                 </div>
             </div>
@@ -366,10 +349,6 @@ foreach ($monthlyDonations as $md) {
 
 <script src="assets/js/dashboard.js"></script>
 <script>
-    function triggerExport(format) {
-        alert('Compilation Complete: The reports database tables have been compiled into ' + format + ' format. Your browser download will begin momentarily.');
-    }
-    
     // Initialize Chart
     const ctx = document.getElementById('donationChart').getContext('2d');
     

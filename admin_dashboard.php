@@ -43,71 +43,6 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Premium Micro-animations & CSS Overrides */
-        .page-content {
-            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .kpi-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .kpi-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-glow), var(--shadow-md);
-            border-color: var(--primary-light);
-        }
-        
-        .glass-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.3s ease;
-        }
-        .glass-card:hover {
-            box-shadow: var(--shadow-md);
-        }
-        
-        .table-responsive {
-            overflow-x: auto;
-            position: relative;
-        }
-        
-        .skeleton {
-            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-        }
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        .modern-table th {
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-        }
-    </style>
 </head>
 <body>
 
@@ -143,7 +78,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
             <!-- KPI Cards Section -->
             <div class="kpi-grid">
                 <?php 
-                render_kpi_card('Total NGOs', $kpis['total_ngos'], 'fas fa-building', 'trend-up', 'Registered Organizations', 'admin_ngos.php');
+                render_kpi_card('Total NGOs', $kpis['total_ngos'], 'fas fa-building', 'trend-up', 'Registered Organizations', 'admin_users.php?role=2');
                 render_kpi_card('Total Users', $kpis['total_users'], 'fas fa-users', 'trend-up', 'Active Accounts', 'admin_users.php');
                 render_kpi_card('Total Donations', $kpis['total_donations'], 'fas fa-hand-holding-heart', 'trend-up', 'Successful Transactions', 'admin_donations.php');
                 render_kpi_card('Amount Raised', formatIndianCurrency($kpis['total_amount']), 'fas fa-dollar-sign', 'trend-up', 'Total Funds', 'admin_reports.php');

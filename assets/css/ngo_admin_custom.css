@@ -1,0 +1,161 @@
+/* NGO Admin Dashboard Custom Styles */
+/* Enhancements for usability, responsiveness, UI consistency */
+
+/* 1. Card Enhancements & Hover Effects */
+.ngo-hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+}
+.ngo-hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* 2. Button Consistency & Smooth Transitions */
+.ngo-btn-transition {
+    transition: all 0.3s ease;
+}
+.ngo-btn-transition:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+.ngo-btn-transition:active {
+    transform: translateY(1px);
+}
+
+/* 3. Status Badges */
+.ngo-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+}
+.ngo-badge-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+}
+.ngo-badge-pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #D97706;
+}
+.ngo-badge-completed {
+    background: rgba(59, 130, 246, 0.15);
+    color: #2563EB;
+}
+.ngo-badge-inactive, .ngo-badge-rejected, .ngo-badge-cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #DC2626;
+}
+
+/* 4. Filter Bar Enhancements */
+.ngo-filter-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+.ngo-filter-input {
+    padding: 10px 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    background: #f9fafb;
+    min-width: 200px;
+    transition: all 0.2s;
+}
+.ngo-filter-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
+}
+
+/* 5. Skeleton Loading Animation (Placeholders) */
+.ngo-skeleton {
+    animation: ngo-skeleton-loading 1.5s infinite linear;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+}
+@keyframes ngo-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 6. Empty State Polish */
+.ngo-empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px dashed rgba(0,0,0,0.1);
+}
+.ngo-empty-state i {
+    font-size: 3rem;
+    color: #9CA3AF;
+    margin-bottom: 1rem;
+}
+.ngo-empty-state h4 {
+    font-size: 1.25rem;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+.ngo-empty-state p {
+    color: #6B7280;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+/* 7. Enhanced Table Spacing */
+.modern-table th, .modern-table td {
+    padding: 16px 20px; /* Increased from default */
+    vertical-align: middle;
+}
+
+/* 8. Notification Cards */
+.ngo-notif-card {
+    transition: background 0.2s ease;
+    border-radius: 8px;
+    padding: 15px;
+}
+.ngo-notif-card:hover {
+    background: #f9fafb;
+}
+.ngo-notif-unread {
+    border-left: 4px solid var(--primary);
+    background: rgba(124, 154, 134, 0.03);
+}
+
+/* 9. Profile Form Enhancements */
+.ngo-profile-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+    margin-bottom: 25px;
+}
+
+/* 10. Dashboard Responsive Chart Container */
+.ngo-chart-container {
+    height: 350px; 
+    width: 100%;
+    position: relative;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ngo-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .ngo-filter-input {
+        width: 100%;
+    }
+}

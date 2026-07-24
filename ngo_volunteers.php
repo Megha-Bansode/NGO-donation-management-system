@@ -164,28 +164,11 @@ function calculateHours($checkIn, $checkOut) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <!-- NGO Admin Custom CSS -->
+    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <style>
-        .filter-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .filter-bar input, .filter-bar select {
-            padding: 10px 15px;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            font-family: var(--font-body);
-            background: white;
-            min-width: 200px;
-        }
-        .filter-bar input:focus, .filter-bar select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
-        }
+
         .pagination {
             display: flex;
             justify-content: center;
@@ -315,10 +298,10 @@ function calculateHours($checkIn, $checkOut) {
 
             <!-- Filter Bar -->
             <div class="glass-card" style="margin-bottom: 20px;">
-                <form method="GET" action="ngo_volunteers.php" class="filter-bar">
-                    <input type="text" name="search" placeholder="Search volunteer..." value="<?php echo htmlspecialchars($search); ?>">
+                <form method="GET" action="ngo_volunteers.php" class="ngo-filter-bar">
+                    <input type="text" name="search" class="ngo-filter-input" placeholder="Search volunteer..." value="<?php echo htmlspecialchars($search); ?>">
                     
-                    <select name="event_id">
+                    <select name="event_id" class="ngo-filter-input">
                         <option value="">All Events</option>
                         <?php foreach($allEvents as $evt): ?>
                             <option value="<?php echo $evt['id']; ?>" <?php echo $event_filter == $evt['id'] ? 'selected' : ''; ?>>
@@ -327,20 +310,20 @@ function calculateHours($checkIn, $checkOut) {
                         <?php endforeach; ?>
                     </select>
 
-                    <select name="status">
+                    <select name="status" class="ngo-filter-input">
                         <option value="">All Statuses</option>
                         <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
                         <option value="approved" <?php echo $status_filter === 'approved' ? 'selected' : ''; ?>>Approved</option>
                         <option value="rejected" <?php echo $status_filter === 'rejected' ? 'selected' : ''; ?>>Rejected</option>
                     </select>
 
-                    <button type="submit" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
-                    <a href="ngo_volunteers.php" class="btn-primary" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
+                    <button type="submit" class="btn-primary ngo-btn-transition" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
+                    <a href="ngo_volunteers.php" class="btn-primary ngo-btn-transition" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
                 </form>
             </div>
 
             <!-- Registrations Table -->
-            <div class="glass-card">
+            <div class="glass-card ngo-hover-card">
                 <?php if (empty($registrations)): ?>
                     <?php render_empty_state('No Volunteers Found', 'No registrations match your search criteria.', 'fas fa-users'); ?>
                 <?php else: ?>
@@ -374,7 +357,7 @@ function calculateHours($checkIn, $checkOut) {
                                         <span style="font-size: 0.85rem; color: var(--text-muted);"><?php echo htmlspecialchars($reg['skills'] ?: 'None listed'); ?></span>
                                     </td>
                                     <td>
-                                        <span class="badge" style="background: rgba(0,0,0,0.05); color: var(--text-dark);">
+                                        <span class="ngo-badge" style="background: rgba(0,0,0,0.05); color: var(--text-dark);">
                                             <?php echo $reg['tasks_completed']; ?> / <?php echo $reg['tasks_assigned']; ?>
                                         </span>
                                     </td>
@@ -382,32 +365,22 @@ function calculateHours($checkIn, $checkOut) {
                                         <span style="font-weight: 700; color: var(--primary);"><?php echo $hours; ?>h</span>
                                     </td>
                                     <td>
-                                        <?php 
-                                            $statusColors = [
-                                                'approved' => 'rgba(16,185,129,0.1)', 'pending' => 'rgba(245,158,11,0.1)',
-                                                'rejected' => 'rgba(239,68,68,0.1)'
-                                            ];
-                                            $textColors = [
-                                                'approved' => 'var(--success)', 'pending' => 'var(--warning)',
-                                                'rejected' => 'var(--danger)'
-                                            ];
-                                        ?>
-                                        <span class="badge" style="background: <?php echo $statusColors[$reg['approval_status']]; ?>; color: <?php echo $textColors[$reg['approval_status']]; ?>; margin-bottom: 5px; display: inline-block;">
+                                        <span class="ngo-badge ngo-badge-<?php echo htmlspecialchars($reg['approval_status']); ?>" style="margin-bottom: 5px; display: inline-block;">
                                             <?php echo ucfirst(htmlspecialchars($reg['approval_status'])); ?>
                                         </span>
                                         <br>
                                         <?php if($reg['specific_attendance']): ?>
-                                            <span class="badge" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">
+                                            <span class="ngo-badge" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">
                                                 <i class="fas fa-clock"></i> <?php echo ucfirst(htmlspecialchars($reg['specific_attendance'])); ?>
                                             </span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 8px;">
-                                            <button onclick='openApprovalModal(<?php echo json_encode($reg); ?>)' class="action-btn" style="width: 32px; height: 32px;" title="Update Approval Status">
+                                            <button onclick='openApprovalModal(<?php echo json_encode($reg); ?>)' class="action-btn ngo-btn-transition" style="width: 32px; height: 32px;" title="Update Approval Status">
                                                 <i class="fas fa-check-circle"></i>
                                             </button>
-                                            <button onclick='openAttendanceModal(<?php echo json_encode($reg); ?>)' class="action-btn" style="width: 32px; height: 32px; color: var(--primary);" title="Update Attendance & Hours">
+                                            <button onclick='openAttendanceModal(<?php echo json_encode($reg); ?>)' class="action-btn ngo-btn-transition" style="width: 32px; height: 32px; color: var(--primary);" title="Update Attendance & Hours">
                                                 <i class="fas fa-user-clock"></i>
                                             </button>
                                         </div>
