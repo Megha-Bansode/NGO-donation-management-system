@@ -1,9 +1,0 @@
-{
-  "name": "ngo/system",
-  "require": {},
-  "autoload": {
-    "psr-4": {
-      "Backend\\": "api/"
-    }
-  }
-}

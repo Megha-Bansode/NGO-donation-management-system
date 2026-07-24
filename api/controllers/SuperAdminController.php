@@ -1,2 +1,0 @@
-﻿<?php
-// Super Admin Controller
