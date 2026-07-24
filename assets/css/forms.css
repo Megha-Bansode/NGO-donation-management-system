@@ -1,0 +1,125 @@
+/*
+ * Purpose: Extensive Form elements styling
+ * Author: Senior Software Architect
+ * Project Name: NGO Donation & Volunteer Management System
+ * Module: Assets
+ * Version: 1.1.0
+ */
+
+/* ==========================================================================
+   FORM GROUPS & LABELS
+   ========================================================================== */
+.form-group { margin-bottom: 1.5rem; position: relative; }
+.form-label { display: block; font-size: var(--label-size); font-weight: 500; color: var(--text-primary); margin-bottom: 0.5rem; }
+.form-text { display: block; font-size: var(--caption-size); color: var(--text-tertiary); margin-top: 0.375rem; }
+
+/* ==========================================================================
+   INPUTS, TEXTAREAS, SELECTS
+   ========================================================================== */
+.form-control { width: 100%; padding: 0.75rem 1rem; font-size: var(--body-size); font-family: var(--font-family); color: var(--text-primary); background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); transition: all var(--transition-fast); outline: none; box-shadow: var(--shadow-sm); line-height: 1.5; }
+.form-control::placeholder { color: var(--text-tertiary); }
+.form-control:hover:not(:disabled) { border-color: var(--border-dark); }
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light), var(--shadow-sm); }
+.form-control:disabled { background-color: var(--border-light); color: var(--text-tertiary); cursor: not-allowed; }
+
+textarea.form-control { resize: vertical; min-height: 120px; }
+
+select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25rem; padding-right: 3rem; }
+select.form-control[multiple] { background-image: none; padding-right: 1rem; height: auto; min-height: 120px; }
+
+/* ==========================================================================
+   SEARCH INPUT
+   ========================================================================== */
+.search-input-wrapper { position: relative; display: flex; align-items: center; }
+.search-input-wrapper .search-icon { position: absolute; left: 1rem; color: var(--text-tertiary); font-size: 1.125rem; }
+.search-input-wrapper .form-control { padding-left: 2.75rem; border-radius: var(--radius-full); }
+
+/* ==========================================================================
+   CHECKBOX, RADIO, TOGGLE SWITCH
+   ========================================================================== */
+.custom-checkbox, .custom-radio { display: inline-flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: var(--body-size); color: var(--text-secondary); user-select: none; }
+.custom-checkbox input[type="checkbox"], .custom-radio input[type="radio"] { width: 1.25rem; height: 1.25rem; cursor: pointer; accent-color: var(--primary); border: 1px solid var(--border-dark); }
+.custom-radio input[type="radio"] { border-radius: var(--radius-full); }
+
+/* Toggle Switch */
+.toggle-switch { position: relative; display: inline-flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: relative; width: 44px; height: 24px; background-color: var(--border-dark); border-radius: var(--radius-full); transition: var(--transition-fast); }
+.toggle-slider::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: var(--transition-fast); box-shadow: var(--shadow-sm); }
+.toggle-switch input:checked + .toggle-slider { background-color: var(--primary); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+.toggle-switch input:focus + .toggle-slider { box-shadow: 0 0 0 3px var(--primary-light); }
+
+/* ==========================================================================
+   RANGE SLIDER
+   ========================================================================== */
+.form-range { width: 100%; height: 6px; padding: 0; background-color: var(--border-light); border-radius: var(--radius-full); appearance: none; outline: none; }
+.form-range::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background-color: var(--primary); border-radius: 50%; cursor: pointer; transition: transform var(--transition-fast); box-shadow: var(--shadow-sm); }
+.form-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+/* ==========================================================================
+   INPUT GROUPS
+   ========================================================================== */
+.input-group { display: flex; align-items: stretch; width: 100%; }
+.input-group .form-control { border-radius: 0; flex: 1 1 auto; width: 1%; }
+.input-group .form-control:not(:first-child) { border-left: 0; }
+.input-group .input-group-text { display: flex; align-items: center; padding: 0.75rem 1rem; font-size: var(--body-size); font-weight: 500; color: var(--text-secondary); text-align: center; white-space: nowrap; background-color: var(--surface-hover); border: 1px solid var(--border); }
+.input-group > :first-child { border-top-left-radius: var(--radius-md); border-bottom-left-radius: var(--radius-md); }
+.input-group > :last-child { border-top-right-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
+
+/* ==========================================================================
+   PASSWORD FIELD & TOGGLE
+   ========================================================================== */
+.password-wrapper { position: relative; }
+.password-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-tertiary); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.password-toggle:hover { color: var(--primary); }
+
+.password-strength { display: flex; gap: 6px; margin-top: 0.75rem; }
+.password-strength .strength-bar { height: 4px; flex: 1; background-color: var(--border-light); border-radius: var(--radius-full); transition: background-color var(--transition-normal); }
+.password-strength.weak .strength-bar:nth-child(1) { background-color: var(--danger); }
+.password-strength.medium .strength-bar:nth-child(1), .password-strength.medium .strength-bar:nth-child(2) { background-color: var(--warning); }
+.password-strength.strong .strength-bar { background-color: var(--success); }
+.password-strength-text { font-size: var(--caption-size); color: var(--text-secondary); margin-top: 0.25rem; display: block; text-align: right; }
+
+/* ==========================================================================
+   OTP INPUT STYLE
+   ========================================================================== */
+.otp-group { display: flex; gap: 0.75rem; justify-content: center; }
+.otp-input { width: 3rem; height: 3.5rem; text-align: center; font-size: var(--h4-size); font-weight: 600; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface); transition: all var(--transition-fast); }
+.otp-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); outline: none; }
+
+/* ==========================================================================
+   FLOATING LABELS
+   ========================================================================== */
+.form-floating { position: relative; }
+.form-floating .form-control { padding: 1.25rem 1rem 0.5rem 1rem; height: 3.5rem; }
+.form-floating .form-label { position: absolute; top: 50%; left: 1rem; transform: translateY(-50%); font-size: var(--body-size); color: var(--text-tertiary); transition: all var(--transition-fast); pointer-events: none; margin: 0; transform-origin: 0 0; }
+.form-floating .form-control:focus ~ .form-label, .form-floating .form-control:not(:placeholder-shown) ~ .form-label { top: 0.5rem; transform: translateY(0) scale(0.85); color: var(--primary); font-weight: 500; }
+
+/* ==========================================================================
+   VALIDATION STATES
+   ========================================================================== */
+.form-control.is-invalid { border-color: var(--danger); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23EF4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+.form-control.is-invalid:focus { box-shadow: 0 0 0 3px #FEE2E2; }
+.invalid-feedback { display: block; color: var(--danger); font-size: var(--caption-size); margin-top: 0.375rem; font-weight: 500; }
+
+.form-control.is-valid { border-color: var(--success); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310B981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+.form-control.is-valid:focus { box-shadow: 0 0 0 3px #D1FAE5; }
+
+/* ==========================================================================
+   DATE & TIME PICKERS
+   ========================================================================== */
+input[type="date"].form-control, input[type="time"].form-control { position: relative; }
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; transition: opacity var(--transition-fast); }
+input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* ==========================================================================
+   FILE UPLOAD
+   ========================================================================== */
+.file-upload { position: relative; border: 2px dashed var(--border-dark); border-radius: var(--radius-lg); padding: 3rem 2rem; text-align: center; background: var(--surface); transition: all var(--transition-fast); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.file-upload:hover { border-color: var(--primary); background: var(--primary-light); }
+.file-upload input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10; }
+.file-upload .upload-icon { font-size: 2.5rem; color: var(--text-tertiary); margin-bottom: 1rem; transition: color var(--transition-fast); }
+.file-upload:hover .upload-icon { color: var(--primary); }
+.file-upload .upload-text { color: var(--text-primary); font-weight: 500; font-size: var(--body-size); display: block; }
+.file-upload .upload-hint { color: var(--text-tertiary); font-size: var(--small-size); margin-top: 0.5rem; }

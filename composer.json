@@ -1,0 +1,11 @@
+{
+    "name": "ngo/donation-management-system",
+    "description": "NGO Donation & Volunteer Management System",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Senior Software Architect"
+        }
+    ],
+    "require": {}
+}

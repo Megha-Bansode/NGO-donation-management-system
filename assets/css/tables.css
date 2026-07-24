@@ -1,0 +1,107 @@
+/*
+ * Purpose: Premium data tables styling
+ * Author: Senior Software Architect
+ * Project Name: NGO Donation & Volunteer Management System
+ * Module: Assets
+ * Version: 1.1.0
+ */
+
+/* ==========================================================================
+   MODERN DATA TABLE CONTAINER
+   ========================================================================== */
+.table-wrapper { width: 100%; overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-sm); position: relative; }
+
+/* ==========================================================================
+   TABLE STRUCTURE
+   ========================================================================== */
+.table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; }
+.table th, .table td { padding: 1rem 1.5rem; vertical-align: middle; }
+
+/* Sticky Header */
+.table th { background-color: var(--surface-hover); color: var(--text-secondary); font-size: var(--caption-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+.table th:first-child { border-top-left-radius: var(--radius-lg); }
+.table th:last-child { border-top-right-radius: var(--radius-lg); }
+
+/* Rows */
+.table td { border-bottom: 1px solid var(--border-light); color: var(--text-primary); font-size: var(--small-size); }
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:last-child td:first-child { border-bottom-left-radius: var(--radius-lg); }
+.table tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius-lg); }
+
+/* Hover Row */
+.table-hover tbody tr { transition: background-color var(--transition-fast); cursor: default; }
+.table-hover tbody tr:hover { background-color: var(--surface-hover); }
+
+/* ==========================================================================
+   STATUS CHIPS
+   ========================================================================== */
+.table .status-chip { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: var(--caption-size); font-weight: 600; white-space: nowrap; }
+.table .status-active { background: #D1FAE5; color: var(--success); }
+.table .status-pending { background: #FEF3C7; color: var(--warning); }
+.table .status-inactive { background: #FEE2E2; color: var(--danger); }
+.table .status-primary { background: var(--primary-light); color: var(--primary); }
+
+/* ==========================================================================
+   USER & PROFILE CELLS
+   ========================================================================== */
+.table .user-info { display: flex; align-items: center; gap: 1rem; }
+.table .user-info img { width: 40px; height: 40px; border-radius: var(--radius-full); object-fit: cover; background: var(--border-light); flex-shrink: 0; }
+.table .user-info .details { display: flex; flex-direction: column; }
+.table .user-info .name { font-weight: 600; color: var(--text-primary); font-size: var(--small-size); }
+.table .user-info .email { font-size: var(--caption-size); color: var(--text-tertiary); }
+
+/* ==========================================================================
+   ACTION BUTTONS
+   ========================================================================== */
+.table .action-btns { display: flex; gap: 0.5rem; align-items: center; }
+.table .btn-action { background: transparent; border: 1px solid transparent; color: var(--text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-sm); transition: all var(--transition-fast); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.table .btn-action:hover { background: var(--surface-hover); color: var(--primary); border-color: var(--border); }
+.table .btn-action.delete:hover { color: var(--danger); background: #FEE2E2; border-color: transparent; }
+.table .btn-action.edit:hover { color: var(--warning); background: #FEF3C7; border-color: transparent; }
+
+/* ==========================================================================
+   TOOLBAR (Search & Filter)
+   ========================================================================== */
+.table-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--surface); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg); flex-wrap: wrap; gap: 1rem; }
+.table-toolbar .toolbar-title { font-size: var(--h5-size); font-weight: 600; color: var(--text-primary); margin: 0; }
+.table-toolbar .toolbar-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.table-toolbar .search-box { min-width: 250px; position: relative; }
+.table-toolbar .search-box input { width: 100%; padding: 0.5rem 1rem 0.5rem 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface); outline: none; font-size: var(--small-size); }
+.table-toolbar .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+.table-toolbar .search-box i { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); }
+.table-toolbar .filter-dropdown { padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); font-size: var(--small-size); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; outline: none; }
+.table-toolbar .filter-dropdown:hover { background: var(--surface-hover); }
+
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
+.table-pagination { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: var(--surface); border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg); flex-wrap: wrap; gap: 1rem; }
+.table-pagination .pagination-info { font-size: var(--small-size); color: var(--text-secondary); }
+.table-pagination .pagination-controls { display: flex; gap: 0.25rem; align-items: center; }
+.table-pagination .page-btn { padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; transition: all var(--transition-fast); font-size: var(--small-size); font-weight: 500; }
+.table-pagination .page-btn:hover:not(:disabled) { background: var(--surface-hover); }
+.table-pagination .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.table-pagination .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ==========================================================================
+   EMPTY & LOADING STATES
+   ========================================================================== */
+.table-empty-state { padding: 4rem 2rem; text-align: center; color: var(--text-secondary); }
+.table-empty-state i { font-size: 3rem; color: var(--border-dark); margin-bottom: 1rem; }
+.table-empty-state p { margin-bottom: 1rem; font-size: var(--small-size); }
+
+.table-loading-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(2px); z-index: 20; display: flex; align-items: center; justify-content: center; border-radius: inherit; }
+
+/* Skeleton Table Rows */
+.table .skeleton-row td { padding: 1.25rem 1.5rem; }
+.table .skeleton-cell { height: 1rem; background: linear-gradient(90deg, var(--border-light) 25%, var(--border) 50%, var(--border-light) 75%); background-size: 200% 100%; animation: skeletonLoading 1.5s infinite; border-radius: var(--radius-sm); }
+.table .skeleton-avatar { width: 32px; height: 32px; border-radius: 50%; }
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT
+   ========================================================================== */
+@media (max-width: 768px) {
+    .table-toolbar, .table-pagination { flex-direction: column; align-items: stretch; }
+    .table-toolbar .toolbar-actions { width: 100%; justify-content: space-between; }
+    .table-toolbar .search-box { width: 100%; }
+}
