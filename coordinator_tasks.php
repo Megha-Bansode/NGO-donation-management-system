@@ -238,6 +238,32 @@ try {
         .pagination { display: flex; justify-content: center; gap: 5px; margin-top: 20px; }
         .page-btn { padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: white; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
         .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+            border: 1px dashed rgba(0,0,0,0.1);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        .empty-state h4 {
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -297,6 +323,7 @@ try {
                         <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
                         <option value="in_progress" <?php echo $status_filter === 'in_progress' ? 'selected' : ''; ?>>In Progress</option>
                         <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                        <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
 
                     <select name="priority">
@@ -311,10 +338,13 @@ try {
                 </form>
             </div>
 
-            <!-- Tasks Table -->
             <div class="glass-card">
                 <?php if (empty($tasks)): ?>
-                    <?php render_empty_state('No Tasks Found', 'No tasks match your search criteria.', 'fas fa-tasks'); ?>
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h4>No Tasks Found</h4>
+                        <p>No tasks match your search criteria.</p>
+                    </div>
                 <?php else: ?>
                     <div class="table-responsive">
                         <table class="modern-table">
@@ -355,7 +385,8 @@ try {
                                             $statClass = 'badge-primary';
                                             if ($task['completion_status'] == 'completed') $statClass = 'badge-success';
                                             elseif ($task['completion_status'] == 'in_progress') $statClass = 'badge-warning';
-                                            elseif ($task['completion_status'] == 'pending') $statClass = 'badge-danger';
+                                            elseif ($task['completion_status'] == 'pending') $statClass = 'badge-primary';
+                                            elseif ($task['completion_status'] == 'cancelled') $statClass = 'badge-danger';
                                         ?>
                                         <span class="badge <?php echo $statClass; ?>" style="margin-bottom: 5px; display:inline-block;"><?php echo str_replace('_', ' ', ucfirst($task['completion_status'])); ?></span>
                                         <br>
@@ -486,6 +517,7 @@ try {
                         <option value="pending">Pending</option>
                         <option value="in_progress">In Progress</option>
                         <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1;">

@@ -90,6 +90,24 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: white;
+            font-family: var(--font-body);
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
+        }
+    </style>
 </head>
 <body>
 
@@ -150,7 +168,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                             <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>">
                         </div>
                         
-                        <button type="submit" class="btn-primary" style="margin-top: 10px;">Update Profile</button>
+                        <button type="submit" class="btn-primary" style="margin-top: 15px; width: 100%; justify-content: center;"><i class="fas fa-save"></i> Update Profile</button>
                     </form>
                 </div>
                 
@@ -177,7 +195,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                             <input type="password" name="confirm_password" required minlength="8">
                         </div>
                         
-                        <button type="submit" class="btn-primary" style="margin-top: 10px;">Change Password</button>
+                        <button type="submit" class="btn-primary" style="margin-top: 15px; width: 100%; justify-content: center;"><i class="fas fa-key"></i> Change Password</button>
                     </form>
                 </div>
             </div>

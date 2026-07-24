@@ -94,6 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error_msg = "Please fill in all required fields.";
             }
+        } elseif ($action === 'mark_read') {
+            $notif_id = filter_var($_POST['notif_id'], FILTER_VALIDATE_INT);
+            if ($notif_id) {
+                try {
+                    $stmt = $pdo->prepare("UPDATE notifications SET is_read = 1 WHERE id = ? AND recipient_id = ?");
+                    $stmt->execute([$notif_id, $coordinator_id]);
+                    $success_msg = "Notification marked as read.";
+                } catch (PDOException $e) {
+                    $error_msg = "Database error: " . $e->getMessage();
+                }
+            }
         }
     }
 }
@@ -102,6 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $eventsStmt = $pdo->prepare("SELECT id, title FROM events WHERE coordinator_id = ? AND status != 'completed' ORDER BY event_date ASC");
 $eventsStmt->execute([$coordinator_id]);
 $myEvents = $eventsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch my notifications
+try {
+    $notifStmt = $pdo->prepare("SELECT * FROM notifications WHERE recipient_id = ? ORDER BY created_at DESC LIMIT 50");
+    $notifStmt->execute([$coordinator_id]);
+    $my_notifications = $notifStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $my_notifications = [];
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -114,6 +135,40 @@ $myEvents = $eventsStmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+            border: 1px dashed rgba(0,0,0,0.1);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        .empty-state h4 {
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .notification-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .notification-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
 </head>
 <body>
 
@@ -204,6 +259,43 @@ $myEvents = $eventsStmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Received Notifications Section -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h3 class="card-title">My Inbox</h3>
+                </div>
+                
+                <?php if (empty($my_notifications)): ?>
+                    <div class="empty-state">
+                        <i class="far fa-bell-slash"></i>
+                        <h4>No Notifications</h4>
+                        <p>You're all caught up! No new notifications.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="notification-list">
+                        <?php foreach($my_notifications as $notif): ?>
+                            <div class="notification-card <?php echo $notif['is_read'] ? 'read' : 'unread'; ?>" style="padding: 15px; border: 1px solid rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 10px; background: <?php echo $notif['is_read'] ? '#fff' : 'rgba(124, 154, 134, 0.05)'; ?>; display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-dark); margin-bottom: 5px;"><?php echo htmlspecialchars($notif['title']); ?></div>
+                                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;"><?php echo nl2br(htmlspecialchars($notif['message'])); ?></div>
+                                    <div style="font-size: 0.75rem; color: var(--primary);"><i class="far fa-clock"></i> <?php echo date('M d, Y h:i A', strtotime($notif['created_at'])); ?></div>
+                                </div>
+                                <?php if(!$notif['is_read']): ?>
+                                    <form method="POST" action="coordinator_notifications.php" style="margin: 0;">
+                                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                        <input type="hidden" name="action" value="mark_read">
+                                        <input type="hidden" name="notif_id" value="<?php echo $notif['id']; ?>">
+                                        <button type="submit" class="badge" style="background: var(--primary); color: white; border: none; cursor: pointer;"><i class="fas fa-check"></i> Mark Read</button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="badge" style="background: rgba(0,0,0,0.05); color: var(--text-muted);"><i class="fas fa-check-double"></i> Read</span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             
         </div>

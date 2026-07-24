@@ -34,6 +34,58 @@ $recent_activity = get_coordinator_recent_activity($pdo, $coordinator_id, 5);
     
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        /* Enhanced Dashboard Styles */
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: linear-gradient(145deg, #ffffff, #f9fbfc);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+        .activity-item {
+            transition: background 0.2s ease, padding-left 0.2s ease;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .activity-item:hover {
+            background: rgba(124, 154, 134, 0.05);
+            padding-left: 15px;
+        }
+        .modern-table tbody tr {
+            transition: background 0.2s ease;
+        }
+        .modern-table tbody tr:hover {
+            background: rgba(0,0,0,0.02);
+        }
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+            border: 1px dashed rgba(0,0,0,0.1);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        .empty-state h4 {
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -106,11 +158,15 @@ $recent_activity = get_coordinator_recent_activity($pdo, $coordinator_id, 5);
                     </div>
                     <div class="activity-feed" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
                         <?php if (empty($recent_activity)): ?>
-                            <p style="text-align:center; color: var(--text-muted); margin-top: 2rem;">No recent activity.</p>
+                            <div class="empty-state">
+                                <i class="fas fa-history"></i>
+                                <h4>No Recent Activity</h4>
+                                <p>There is no recent activity to show right now.</p>
+                            </div>
                         <?php else: ?>
                             <ul style="list-style: none; padding: 0;">
                                 <?php foreach($recent_activity as $log): ?>
-                                    <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.03);">
+                                    <li class="activity-item" style="margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.03);">
                                         <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">
                                             <i class="far fa-clock"></i> <?php echo date('M d, g:i A', strtotime($log['date'])); ?>
                                         </div>
@@ -118,7 +174,7 @@ $recent_activity = get_coordinator_recent_activity($pdo, $coordinator_id, 5);
                                             <?php echo htmlspecialchars($log['description']); ?>
                                         </div>
                                         <div style="font-size: 0.85rem; color: var(--primary);">
-                                            <?php echo htmlspecialchars($log['title']); ?>
+                                            <i class="fas fa-tag"></i> <?php echo htmlspecialchars($log['title']); ?>
                                         </div>
                                     </li>
                                 <?php endforeach; ?>
@@ -147,7 +203,13 @@ $recent_activity = get_coordinator_recent_activity($pdo, $coordinator_id, 5);
                             <tbody>
                             <?php if (empty($upcoming_events)): ?>
                                 <tr>
-                                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">No upcoming events assigned.</td>
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <i class="far fa-calendar-times"></i>
+                                            <h4>No Upcoming Events</h4>
+                                            <p>You have no upcoming events assigned at the moment.</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($upcoming_events as $event): ?>

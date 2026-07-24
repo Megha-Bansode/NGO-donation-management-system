@@ -54,6 +54,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error_msg = "Database error: " . $e->getMessage();
                 }
             }
+        } elseif ($action === 'update_attendance') {
+            $reg_id = filter_var($_POST['reg_id'], FILTER_VALIDATE_INT);
+            $vol_id = filter_var($_POST['vol_id'], FILTER_VALIDATE_INT);
+            $evt_id = filter_var($_POST['evt_id'], FILTER_VALIDATE_INT);
+            $attendance_status = htmlspecialchars($_POST['attendance_status']);
+            $check_in = !empty($_POST['check_in']) ? $_POST['check_in'] : null;
+            $check_out = !empty($_POST['check_out']) ? $_POST['check_out'] : null;
+            
+            if ($reg_id && $vol_id && $evt_id) {
+                try {
+                    $check = $pdo->prepare("SELECT e.coordinator_id FROM volunteer_registrations vr JOIN events e ON vr.event_id = e.id WHERE vr.id = ?");
+                    $check->execute([$reg_id]);
+                    if ($check->fetchColumn() == $_SESSION['user_id']) {
+                        $exist = $pdo->prepare("SELECT id FROM attendance WHERE volunteer_id = ? AND event_id = ?");
+                        $exist->execute([$vol_id, $evt_id]);
+                        if ($exist->fetchColumn()) {
+                            $stmt = $pdo->prepare("UPDATE attendance SET check_in=?, check_out=?, attendance_status=? WHERE volunteer_id=? AND event_id=?");
+                            $stmt->execute([$check_in, $check_out, $attendance_status, $vol_id, $evt_id]);
+                        } else {
+                            $stmt = $pdo->prepare("INSERT INTO attendance (volunteer_id, event_id, check_in, check_out, attendance_status) VALUES (?, ?, ?, ?, ?)");
+                            $stmt->execute([$vol_id, $evt_id, $check_in, $check_out, $attendance_status]);
+                        }
+                        $success_msg = "Attendance updated successfully.";
+                    } else {
+                        $error_msg = "You do not have permission.";
+                    }
+                } catch (PDOException $e) {
+                    $error_msg = "Database error: " . $e->getMessage();
+                }
+            }
         }
     }
 }
@@ -156,7 +186,32 @@ function calculateHours($checkIn, $checkOut) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    
+    <style>
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+            border: 1px dashed rgba(0,0,0,0.1);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        .empty-state h4 {
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
     <style>
         .filter-bar {
             display: flex;
@@ -334,7 +389,11 @@ function calculateHours($checkIn, $checkOut) {
             <!-- Registrations Table -->
             <div class="glass-card">
                 <?php if (empty($registrations)): ?>
-                    <?php render_empty_state('No Volunteers Found', 'No registrations match your search criteria.', 'fas fa-users'); ?>
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h4>No Volunteers Found</h4>
+                        <p>No registrations match your search criteria.</p>
+                    </div>
                 <?php else: ?>
                     <div class="table-responsive">
                         <table class="modern-table">
