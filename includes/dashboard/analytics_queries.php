@@ -206,7 +206,7 @@ function getSystemRecentActivity(PDO $pdo, $limit = 15) {
         SELECT 
             CONCAT(module, ' ', action) as title, 
             module, 
-            created_at as event_date, 
+            timestamp as event_date, 
             CASE 
                 WHEN module = 'Authentication' THEN 'fas fa-sign-in-alt'
                 WHEN module = 'Campaigns' THEN 'fas fa-bullhorn'
@@ -223,7 +223,7 @@ function getSystemRecentActivity(PDO $pdo, $limit = 15) {
                 ELSE 'var(--text-muted)'
             END as color 
         FROM activity_logs
-        ORDER BY created_at DESC
+        ORDER BY timestamp DESC
         LIMIT " . (int)$limit
     );
     $stmt->execute();

@@ -13,7 +13,7 @@ Middleware::role([1]);
 $pdo = getDatabase();
 
 // Fetch Roles for Filter
-$rolesStmt = $pdo->query("SELECT id, role_name FROM roles ORDER BY id ASC");
+$rolesStmt = $pdo->query("SELECT id, name as role_name FROM roles ORDER BY id ASC");
 $roles = $rolesStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Filter Parameters
@@ -37,7 +37,7 @@ if ($search !== '') {
     $params[':search'] = "%{$search}%";
 }
 if ($role_filter) {
-    $whereClauses[] = "al.role_id = :role_id";
+    $whereClauses[] = "u.role_id = :role_id";
     $params[':role_id'] = $role_filter;
 }
 if ($module_filter) {
@@ -49,11 +49,11 @@ if ($action_filter) {
     $params[':action'] = $action_filter;
 }
 if ($start_date) {
-    $whereClauses[] = "al.created_at >= :start_date";
+    $whereClauses[] = "al.timestamp >= :start_date";
     $params[':start_date'] = $start_date . ' 00:00:00';
 }
 if ($end_date) {
-    $whereClauses[] = "al.created_at <= :end_date";
+    $whereClauses[] = "al.timestamp <= :end_date";
     $params[':end_date'] = $end_date . ' 23:59:59';
 }
 
@@ -70,12 +70,12 @@ try {
     $totalPages = ceil($totalLogs / $limit);
 
     // Fetch Logs
-    $query = "SELECT al.*, u.full_name, u.email, r.role_name 
+    $query = "SELECT al.*, al.timestamp as created_at, u.full_name, u.email, r.name as role_name 
               FROM activity_logs al 
               LEFT JOIN users u ON al.user_id = u.id 
-              LEFT JOIN roles r ON al.role_id = r.id 
+              LEFT JOIN roles r ON u.role_id = r.id 
               WHERE $whereSQL 
-              ORDER BY al.created_at DESC 
+              ORDER BY al.timestamp DESC 
               LIMIT :limit OFFSET :offset";
               
     $stmt = $pdo->prepare($query);
