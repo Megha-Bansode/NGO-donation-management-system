@@ -91,16 +91,16 @@ function getDonationAnalytics(PDO $pdo) {
     ");
     $analytics['metrics'] = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmtReceipts = $pdo->query("SELECT COUNT(*) as generated FROM donation_receipts");
+    $stmtReceipts = $pdo->query("SELECT COUNT(*) FROM donation_receipts");
     $analytics['metrics']['receipts'] = $stmtReceipts->fetchColumn();
 
     // Line Chart: Monthly Donations (Last 6 Months)
     $stmtTrend = $pdo->query("
-        SELECT DATE_FORMAT(donation_date, '%b %Y') as month_label, SUM(amount) as total
+        SELECT DATE_FORMAT(donation_date, '%Y-%m') as month_key, DATE_FORMAT(donation_date, '%b %Y') as month_label, SUM(amount) as total
         FROM donations
         WHERE payment_status = 'completed' AND donation_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-        GROUP BY YEAR(donation_date), MONTH(donation_date)
-        ORDER BY YEAR(donation_date) ASC, MONTH(donation_date) ASC
+        GROUP BY DATE_FORMAT(donation_date, '%Y-%m'), DATE_FORMAT(donation_date, '%b %Y')
+        ORDER BY month_key ASC
     ");
     $analytics['monthly_trend'] = $stmtTrend->fetchAll(PDO::FETCH_ASSOC);
 
@@ -168,11 +168,11 @@ function getEventAnalytics(PDO $pdo) {
 
     // Monthly Events
     $stmtTrend = $pdo->query("
-        SELECT DATE_FORMAT(event_date, '%b %Y') as month_label, COUNT(*) as count
+        SELECT DATE_FORMAT(event_date, '%Y-%m') as month_key, DATE_FORMAT(event_date, '%b %Y') as month_label, COUNT(*) as count
         FROM events
         WHERE event_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-        GROUP BY YEAR(event_date), MONTH(event_date)
-        ORDER BY YEAR(event_date) ASC, MONTH(event_date) ASC
+        GROUP BY DATE_FORMAT(event_date, '%Y-%m'), DATE_FORMAT(event_date, '%b %Y')
+        ORDER BY month_key ASC
     ");
     $analytics['monthly_trend'] = $stmtTrend->fetchAll(PDO::FETCH_ASSOC);
 
@@ -206,7 +206,7 @@ function getSystemRecentActivity(PDO $pdo, $limit = 15) {
         SELECT 
             CONCAT(module, ' ', action) as title, 
             module, 
-            timestamp as event_date, 
+            created_at as event_date, 
             CASE 
                 WHEN module = 'Authentication' THEN 'fas fa-sign-in-alt'
                 WHEN module = 'Campaigns' THEN 'fas fa-bullhorn'
@@ -223,7 +223,7 @@ function getSystemRecentActivity(PDO $pdo, $limit = 15) {
                 ELSE 'var(--text-muted)'
             END as color 
         FROM activity_logs
-        ORDER BY timestamp DESC
+        ORDER BY created_at DESC
         LIMIT " . (int)$limit
     );
     $stmt->execute();
