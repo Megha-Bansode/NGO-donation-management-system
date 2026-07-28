@@ -2,6 +2,9 @@
 -- NGO Donation & Volunteer Management System Database (Full Schema + Data)
 -- Version 2.0 - Fully Normalized (3NF), InnoDB, utf8mb4
 
+CREATE DATABASE IF NOT EXISTS `ngo_management` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `ngo_management`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";

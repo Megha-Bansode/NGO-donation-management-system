@@ -160,11 +160,28 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <!-- NGO Admin Custom CSS -->
-    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <style>
-
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 10px 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            background: white;
+            min-width: 200px;
+        }
+        .filter-bar input:focus, .filter-bar select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
+        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -310,7 +327,7 @@ try {
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn-primary ngo-btn-transition" onclick="openCampaignModal()"><i class="fas fa-plus"></i> New Campaign</button>
+                    <button class="btn-primary" onclick="openCampaignModal()"><i class="fas fa-plus"></i> New Campaign</button>
                 </div>
             </div>
 
@@ -328,10 +345,10 @@ try {
 
             <!-- Filter Bar -->
             <div class="glass-card" style="margin-bottom: 20px;">
-                <form method="GET" action="ngo_campaigns.php" class="ngo-filter-bar">
-                    <input type="text" name="search" class="ngo-filter-input" placeholder="Search campaigns..." value="<?php echo htmlspecialchars($search); ?>">
+                <form method="GET" action="ngo_campaigns.php" class="filter-bar">
+                    <input type="text" name="search" placeholder="Search campaigns..." value="<?php echo htmlspecialchars($search); ?>">
                     
-                    <select name="status" class="ngo-filter-input">
+                    <select name="status">
                         <option value="">All Statuses</option>
                         <option value="draft" <?php echo $status_filter === 'draft' ? 'selected' : ''; ?>>Draft</option>
                         <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>>Active</option>
@@ -339,13 +356,13 @@ try {
                         <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
 
-                    <button type="submit" class="btn-primary ngo-btn-transition" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
-                    <a href="ngo_campaigns.php" class="btn-primary ngo-btn-transition" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
+                    <button type="submit" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
+                    <a href="ngo_campaigns.php" class="btn-primary" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
                 </form>
             </div>
 
             <!-- Campaigns Table -->
-            <div class="glass-card ngo-hover-card">
+            <div class="glass-card">
                 <?php if (empty($campaigns)): ?>
                     <?php render_empty_state('No Campaigns Found', 'Start your first fundraising campaign.', 'fas fa-bullhorn'); ?>
                 <?php else: ?>
@@ -381,7 +398,17 @@ try {
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="ngo-badge ngo-badge-<?php echo htmlspecialchars($camp['status']); ?>">
+                                        <?php 
+                                            $statusColors = [
+                                                'active' => 'rgba(16,185,129,0.1)', 'draft' => 'rgba(107,114,128,0.1)',
+                                                'completed' => 'rgba(59,130,246,0.1)', 'cancelled' => 'rgba(239,68,68,0.1)'
+                                            ];
+                                            $textColors = [
+                                                'active' => 'var(--success)', 'draft' => 'var(--text-muted)',
+                                                'completed' => '#3b82f6', 'cancelled' => 'var(--danger)'
+                                            ];
+                                        ?>
+                                        <span class="badge" style="background: <?php echo $statusColors[$camp['status']]; ?>; color: <?php echo $textColors[$camp['status']]; ?>;">
                                             <?php echo ucfirst(htmlspecialchars($camp['status'])); ?>
                                         </span>
                                     </td>
@@ -395,14 +422,14 @@ try {
                                     <td>
                                         <div style="display: flex; gap: 8px; justify-content: flex-end;">
                                             <?php if ($camp['created_by'] == $_SESSION['user_id']): ?>
-                                            <button class="action-btn ngo-btn-transition" onclick="openCampaignModal(<?php echo htmlspecialchars(json_encode($camp)); ?>)" title="Edit">
+                                            <button class="action-btn" onclick="openCampaignModal(<?php echo htmlspecialchars(json_encode($camp)); ?>)" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <form method="POST" action="ngo_campaigns.php" onsubmit="return confirm('Are you sure you want to delete this campaign?');" style="display: inline;">
                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                                 <input type="hidden" name="action" value="delete_campaign">
                                                 <input type="hidden" name="id" value="<?php echo $camp['id']; ?>">
-                                                <button type="submit" class="action-btn ngo-btn-transition" style="color: var(--danger);" title="Delete">
+                                                <button type="submit" class="action-btn" style="color: var(--danger);" title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

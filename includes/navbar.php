@@ -15,7 +15,7 @@ if (!defined('APP_ROOT')) { define('APP_ROOT', dirname(__DIR__)); }
             <ul class="nav-links d-flex">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#campaigns" class="nav-link">Causes</a></li>
+                <li><a href="#campaigns" class="nav-link">Campaigns</a></li>
                 <li><a href="#events" class="nav-link">Events</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>

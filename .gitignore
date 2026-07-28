@@ -1,0 +1,6 @@
+/vendor/
+/logs/*.log
+/temp-puppeteer-test/
+test_output.html
+.DS_Store
+Thumbs.db

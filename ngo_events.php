@@ -157,11 +157,28 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <!-- NGO Admin Custom CSS -->
-    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <style>
-
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 10px 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            background: white;
+            min-width: 200px;
+        }
+        .filter-bar input:focus, .filter-bar select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
+        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -312,13 +329,13 @@ try {
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn-primary ngo-btn-transition" onclick="openEventModal()"><i class="fas fa-plus"></i> Create Event</button>
+                    <button class="btn-primary" onclick="openEventModal()"><i class="fas fa-plus"></i> Create Event</button>
                 </div>
             </div>
 
             <!-- Event Statistics -->
             <div class="summary-grid">
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(124, 154, 134, 0.1); color: var(--primary);">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
@@ -327,7 +344,7 @@ try {
                         <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark);"><?php echo $stats['total_events'] ?? 0; ?></div>
                     </div>
                 </div>
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
                         <i class="fas fa-clock"></i>
                     </div>
@@ -336,7 +353,7 @@ try {
                         <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark);"><?php echo $stats['upcoming'] ?? 0; ?></div>
                     </div>
                 </div>
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                         <i class="fas fa-check-circle"></i>
                     </div>
@@ -361,10 +378,10 @@ try {
 
             <!-- Filter Bar -->
             <div class="glass-card" style="margin-bottom: 20px;">
-                <form method="GET" action="ngo_events.php" class="ngo-filter-bar">
-                    <input type="text" name="search" class="ngo-filter-input" placeholder="Search events..." value="<?php echo htmlspecialchars($search); ?>">
+                <form method="GET" action="ngo_events.php" class="filter-bar">
+                    <input type="text" name="search" placeholder="Search events..." value="<?php echo htmlspecialchars($search); ?>">
                     
-                    <select name="status" class="ngo-filter-input">
+                    <select name="status">
                         <option value="">All Statuses</option>
                         <option value="upcoming" <?php echo $status_filter === 'upcoming' ? 'selected' : ''; ?>>Upcoming</option>
                         <option value="ongoing" <?php echo $status_filter === 'ongoing' ? 'selected' : ''; ?>>Ongoing</option>
@@ -372,13 +389,13 @@ try {
                         <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
 
-                    <button type="submit" class="btn-primary ngo-btn-transition" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
-                    <a href="ngo_events.php" class="btn-primary ngo-btn-transition" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
+                    <button type="submit" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
+                    <a href="ngo_events.php" class="btn-primary" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
                 </form>
             </div>
 
             <!-- Events Table -->
-            <div class="glass-card ngo-hover-card">
+            <div class="glass-card">
                 <?php if (empty($events)): ?>
                     <?php render_empty_state('No Events Found', 'Create your first community event.', 'far fa-calendar-alt'); ?>
                 <?php else: ?>
@@ -411,20 +428,30 @@ try {
                                         <span style="color: var(--text-muted); font-size: 0.8rem;">/ <?php echo $evt['max_volunteers'] ?: '∞'; ?></span>
                                     </td>
                                     <td>
-                                        <span class="ngo-badge ngo-badge-<?php echo htmlspecialchars($evt['status']); ?>">
+                                        <?php 
+                                            $statusColors = [
+                                                'upcoming' => 'rgba(245,158,11,0.1)', 'ongoing' => 'rgba(59,130,246,0.1)',
+                                                'completed' => 'rgba(16,185,129,0.1)', 'cancelled' => 'rgba(239,68,68,0.1)'
+                                            ];
+                                            $textColors = [
+                                                'upcoming' => 'var(--warning)', 'ongoing' => '#3b82f6',
+                                                'completed' => 'var(--success)', 'cancelled' => 'var(--danger)'
+                                            ];
+                                        ?>
+                                        <span class="badge" style="background: <?php echo $statusColors[$evt['status']]; ?>; color: <?php echo $textColors[$evt['status']]; ?>;">
                                             <?php echo ucfirst(htmlspecialchars($evt['status'])); ?>
                                         </span>
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 8px;">
-                                            <button onclick='openEventModal(<?php echo json_encode($evt); ?>)' class="action-btn ngo-btn-transition" style="width: 32px; height: 32px;" title="Edit Event">
+                                            <button onclick='openEventModal(<?php echo json_encode($evt); ?>)' class="action-btn" style="width: 32px; height: 32px;" title="Edit Event">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <form method="POST" action="ngo_events.php" onsubmit="return confirm('Are you sure you want to delete this event?');" style="display: inline;">
                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                                 <input type="hidden" name="action" value="delete_event">
                                                 <input type="hidden" name="id" value="<?php echo $evt['id']; ?>">
-                                                <button type="submit" class="action-btn ngo-btn-transition" style="width: 32px; height: 32px; color: var(--danger);" title="Delete Event">
+                                                <button type="submit" class="action-btn" style="width: 32px; height: 32px; color: var(--danger);" title="Delete Event">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

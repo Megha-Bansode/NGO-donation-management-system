@@ -25,17 +25,17 @@ $csrfToken = Security::generateCSRF();
     <?php include 'includes/navbar.php'; ?>
 
     <!-- 1. Hero Section -->
-    <header id="home" class="hero-section" id="parallax-scene">
+    <header id="home" class="hero-section parallax-scene">
         <div class="hero-bg-texture" data-depth="0.05"></div>
         <div class="hero-glow-blob top-blob" data-depth="0.1"></div>
         <div class="hero-glow-blob bottom-blob" data-depth="-0.1"></div>
         <div class="hero-particles"></div>
         <!-- Slider Navigation Dots -->
         <div class="hero-slider-nav">
-            <button class="hero-dot active"></button>
-            <button class="hero-dot"></button>
-            <button class="hero-dot"></button>
-            <button class="hero-dot"></button>
+            <button class="hero-dot active" aria-label="Slide 1"></button>
+            <button class="hero-dot" aria-label="Slide 2"></button>
+            <button class="hero-dot" aria-label="Slide 3"></button>
+            <button class="hero-dot" aria-label="Slide 4"></button>
         </div>
 
         <div class="container hero-container">
@@ -56,7 +56,7 @@ $csrfToken = Security::generateCSRF();
                 
                 <p class="hero-desc">Welcome to the Arohan Foundation. We are dedicated to creating sustainable solutions and providing direct, transparent support to communities in need across the globe.</p>
                 
-                <button class="btn-premium">Discover Now <i class="fas fa-arrow-up-right-from-square"></i></button>
+                <a href="#about" class="btn-premium">Discover Now <i class="fas fa-arrow-up-right-from-square"></i></a>
             </div>
             
             <div class="hero-visual" data-animate="zoom-in">
@@ -143,10 +143,16 @@ $csrfToken = Security::generateCSRF();
         <div class="container about-grid">
             <div class="about-images" data-animate="fade-right" data-depth="0.05">
                 <div class="img-wrap main">
-                    <img src="https://images.unsplash.com/photo-1593113514214-411bd13fa1bd?auto=format&fit=crop&w=800&q=80" alt="Volunteer Work">
+                    <img src="assets/images/volunteers/volunteer_team.png"
+                         alt="Volunteer Work"
+                         loading="lazy"
+                         style="width:100%; height:100%; object-fit:cover; border-radius:16px; display:block;">
                 </div>
                 <div class="img-wrap sub">
-                    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=600&q=80" alt="Community">
+                    <img src="assets/images/volunteers/community_help.png"
+                         alt="Community Help"
+                         loading="lazy"
+                         style="width:100%; height:100%; object-fit:cover; border-radius:12px; display:block;">
                 </div>
             </div>
             
@@ -171,8 +177,7 @@ $csrfToken = Security::generateCSRF();
                         </div>
                     </div>
                 </div>
-                
-                <a href="#about" class="btn btn-premium mt-5">Discover Our Story</a>
+
             </div>
         </div>
     </section>
@@ -224,7 +229,7 @@ $csrfToken = Security::generateCSRF();
     <section id="campaigns" class="campaigns-section section-padding bg-light">
         <div class="container">
             <div class="section-header text-center" data-animate="fade-up">
-                <span class="section-subtitle">Featured Causes</span>
+                <span class="section-subtitle">Active Fundraising Campaigns</span>
                 <h2 class="section-title">Help us reach our goals</h2>
             </div>
 
@@ -241,8 +246,8 @@ $csrfToken = Security::generateCSRF();
                         <p class="card-desc">Help us build a new school and provide essential learning materials for 500 children.</p>
                         
                         <div class="fund-stats">
-                            <span class="raised">Raised: $45,000</span>
-                            <span class="goal">Goal: $60,000</span>
+                            <span class="raised">Raised: ₹45,000</span>
+                            <span class="goal">Goal: ₹60,000</span>
                         </div>
                         <div class="fund-bar-bg">
                             <div class="fund-bar-fill" data-percent="75"></div>
@@ -267,8 +272,8 @@ $csrfToken = Security::generateCSRF();
                         <p class="card-desc">Building sustainable solar-powered water wells to serve isolated communities.</p>
                         
                         <div class="fund-stats">
-                            <span class="raised">Raised: $85,000</span>
-                            <span class="goal">Goal: $100,000</span>
+                            <span class="raised">Raised: ₹85,000</span>
+                            <span class="goal">Goal: ₹100,000</span>
                         </div>
                         <div class="fund-bar-bg">
                             <div class="fund-bar-fill" data-percent="85"></div>
@@ -293,8 +298,8 @@ $csrfToken = Security::generateCSRF();
                         <p class="card-desc">Providing critical medical supplies and mobile clinics in disaster-struck zones.</p>
                         
                         <div class="fund-stats">
-                            <span class="raised">Raised: $20,000</span>
-                            <span class="goal">Goal: $50,000</span>
+                            <span class="raised">Raised: ₹20,000</span>
+                            <span class="goal">Goal: ₹50,000</span>
                         </div>
                         <div class="fund-bar-bg">
                             <div class="fund-bar-fill" data-percent="40"></div>
@@ -309,7 +314,7 @@ $csrfToken = Security::generateCSRF();
             </div>
             
             <div class="text-center mt-5" style="margin-top: 60px;">
-                <a href="#campaigns" class="btn-premium btn-lg">View All Causes</a>
+                <a href="#campaigns" class="btn-premium btn-lg">View All Campaigns</a>
             </div>
         </div>
     </section>
@@ -358,60 +363,6 @@ $csrfToken = Security::generateCSRF();
         </div>
     </section>
 
-    <!-- 7. Testimonials -->
-    <section class="testimonials-section section-padding">
-        <div class="container text-center" data-animate="fade-up">
-            <span class="section-subtitle">Testimonials</span>
-            <h2 class="section-title" style="margin-bottom: 40px;">What people say</h2>
-        </div>
-        
-        <div class="testimonial-carousel" data-animate="fade-up">
-            <div class="testimonial-track">
-                <div class="testi-card">
-                    <i class="fas fa-quote-right testi-quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="testi-text">"The transparency is unmatched. I can track exactly where every dollar of my donation goes. The platform is beautiful."</p>
-                    <div class="testi-author">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Author">
-                        <div class="author-info">
-                            <h4>Sarah Jenkins</h4>
-                            <p>Monthly Donor</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testi-card">
-                    <i class="fas fa-quote-right testi-quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="testi-text">"Volunteering through Arohan Foundation has been incredibly rewarding. The events are well-organized and the impact is immediate."</p>
-                    <div class="testi-author">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Author">
-                        <div class="author-info">
-                            <h4>Mark Thompson</h4>
-                            <p>Active Volunteer</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testi-card">
-                    <i class="fas fa-quote-right testi-quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <p class="testi-text">"Thanks to the clean water initiative funded through this platform, our entire village now has access to safe drinking water."</p>
-                    <div class="testi-author">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Author">
-                        <div class="author-info">
-                            <h4>Elena Rodriguez</h4>
-                            <p>Beneficiary</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- 8. Partners -->
     <section class="partners-section">
@@ -456,23 +407,6 @@ $csrfToken = Security::generateCSRF();
         </div>
     </section>
 
-    <!-- 10. Newsletter -->
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="newsletter-wrapper" data-animate="fade-up">
-                <div class="nl-text">
-                    <h2>Subscribe to our Newsletter</h2>
-                    <p>Get monthly updates on our impact, upcoming events, and stories of hope from around the world.</p>
-                </div>
-                <div class="nl-form">
-                    <form class="nl-input-group">
-                        <input type="email" placeholder="Enter your email address" required>
-                        <button type="submit" class="btn-premium">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- 11. Contact -->
     <section id="contact" class="contact-section section-padding">

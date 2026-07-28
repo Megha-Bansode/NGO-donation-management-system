@@ -85,8 +85,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <!-- NGO Admin Custom CSS -->
-    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
 </head>
 <body>
 
@@ -126,7 +124,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
                 
                 <!-- Profile Settings Form -->
-                <div class="glass-card ngo-hover-card" style="flex: 2; min-width: 400px;">
+                <div class="glass-card" style="flex: 2; min-width: 400px;">
                     <div class="card-header">
                         <h3 class="card-title">Personal Information</h3>
                     </div>
@@ -148,13 +146,13 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                         
                         <div style="margin-top: 20px;">
-                            <button type="submit" class="btn-primary ngo-btn-transition">Save Changes</button>
+                            <button type="submit" class="btn-primary">Save Changes</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Password Change Form -->
-                <div class="glass-card ngo-hover-card" style="flex: 1; min-width: 300px;">
+                <div class="glass-card" style="flex: 1; min-width: 300px;">
                     <div class="card-header">
                         <h3 class="card-title">Change Password</h3>
                     </div>
@@ -176,7 +174,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                         
                         <div style="margin-top: 20px;">
-                            <button type="submit" class="btn-primary ngo-btn-transition" style="width: 100%;"><i class="fas fa-lock"></i> Update Password</button>
+                            <button type="submit" class="btn-primary" style="width: 100%;"><i class="fas fa-lock"></i> Update Password</button>
                         </div>
                     </form>
                 </div>

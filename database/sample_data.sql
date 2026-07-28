@@ -1,6 +1,8 @@
 -- database/sample_data.sql
 -- Sample Data for NGO Donation & Volunteer Management System - Version 2.0
 
+USE `ngo_management`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";

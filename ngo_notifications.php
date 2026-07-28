@@ -121,8 +121,6 @@ $broadcasts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <!-- NGO Admin Custom CSS -->
-    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <style>
         .layout-grid {
@@ -278,7 +276,7 @@ $broadcasts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="layout-grid">
                 <!-- Send Form -->
                 <div>
-                    <div class="form-card ngo-hover-card">
+                    <div class="form-card">
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Use this tool to communicate with Donors and Volunteers regarding your campaigns and events.</p>
                         <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
                             <i class="fas fa-paper-plane" style="color: var(--primary);"></i> Send Broadcast
@@ -309,7 +307,7 @@ $broadcasts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <textarea name="message" required placeholder="Write your message here..."></textarea>
                             </div>
                             
-                            <button type="submit" class="btn-primary ngo-btn-transition" style="width: 100%; justify-content: center;">
+                            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
                                 <i class="fas fa-paper-plane"></i> Send Notification
                             </button>
                         </form>
@@ -318,7 +316,7 @@ $broadcasts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <!-- History -->
                 <div>
-                    <div class="form-card ngo-hover-card" style="padding: 0;">
+                    <div class="form-card" style="padding: 0;">
                         <div style="padding: 20px 25px; border-bottom: 1px solid rgba(0,0,0,0.05);">
                             <h3 style="margin: 0; color: var(--text-dark);">Broadcast History</h3>
                         </div>

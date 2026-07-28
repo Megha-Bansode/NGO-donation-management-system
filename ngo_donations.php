@@ -139,11 +139,38 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Dashboard Core CSS -->
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <!-- NGO Admin Custom CSS -->
-    <link rel="stylesheet" href="assets/css/ngo_admin_custom.css">
     
     <style>
-
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 10px 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            background: white;
+            min-width: 150px;
+        }
+        .filter-bar input:focus, .filter-bar select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 154, 134, 0.2);
+        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -297,7 +324,7 @@ try {
             
             <!-- Financial Summary -->
             <div class="summary-grid">
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                         <i class="fas fa-check-circle"></i>
                     </div>
@@ -306,7 +333,7 @@ try {
                         <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark);"><?php echo formatIndianCurrency($summary['total_collected'] ?? 0); ?></div>
                     </div>
                 </div>
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
                         <i class="fas fa-clock"></i>
                     </div>
@@ -315,7 +342,7 @@ try {
                         <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark);"><?php echo formatIndianCurrency($summary['total_pending'] ?? 0); ?></div>
                     </div>
                 </div>
-                <div class="summary-card ngo-hover-card">
+                <div class="summary-card">
                     <div class="summary-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
                         <i class="fas fa-undo"></i>
                     </div>
@@ -328,14 +355,14 @@ try {
 
             <!-- Filter Bar -->
             <div class="glass-card" style="margin-bottom: 20px;">
-                <form method="GET" action="ngo_donations.php" class="ngo-filter-bar">
+                <form method="GET" action="ngo_donations.php" class="filter-bar">
                     <div class="filter-group">
                         <label>Search</label>
-                        <input type="text" name="search" class="ngo-filter-input" placeholder="Txn ID, Receipt, Name..." value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="text" name="search" placeholder="Txn ID, Receipt, Name..." value="<?php echo htmlspecialchars($search); ?>">
                     </div>
                     <div class="filter-group">
                         <label>Status</label>
-                        <select name="status" class="ngo-filter-input">
+                        <select name="status">
                             <option value="">All Statuses</option>
                             <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
                             <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
@@ -346,21 +373,21 @@ try {
                     
                     <div class="filter-group">
                         <label>From Date</label>
-                        <input type="date" name="start_date" class="ngo-filter-input" value="<?php echo htmlspecialchars($start_date); ?>">
+                        <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>">
                     </div>
                     
                     <div class="filter-group">
                         <label>To Date</label>
-                        <input type="date" name="end_date" class="ngo-filter-input" value="<?php echo htmlspecialchars($end_date); ?>">
+                        <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>">
                     </div>
 
-                    <button type="submit" class="btn-primary ngo-btn-transition" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
-                    <a href="ngo_donations.php" class="btn-primary ngo-btn-transition" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
+                    <button type="submit" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-filter"></i> Filter</button>
+                    <a href="ngo_donations.php" class="btn-primary" style="padding: 10px 20px; background: rgba(0,0,0,0.05); color: var(--text-dark); text-decoration: none;"><i class="fas fa-undo"></i> Reset</a>
                 </form>
             </div>
 
             <!-- Donations Table -->
-            <div class="glass-card ngo-hover-card">
+            <div class="glass-card">
                 <?php if (empty($donations)): ?>
                     <?php render_empty_state('No Donations Found', 'No transactions match your search criteria.', 'fas fa-receipt'); ?>
                 <?php else: ?>
@@ -399,18 +426,28 @@ try {
                                     </td>
                                     <td><?php echo date('M d, Y', strtotime($don['donation_date'])); ?></td>
                                     <td>
-                                        <span class="ngo-badge ngo-badge-<?php echo htmlspecialchars($don['payment_status']); ?>">
+                                        <?php 
+                                            $statusColors = [
+                                                'completed' => 'rgba(16,185,129,0.1)', 'pending' => 'rgba(245,158,11,0.1)',
+                                                'failed' => 'rgba(239,68,68,0.1)', 'refunded' => 'rgba(107,114,128,0.1)'
+                                            ];
+                                            $textColors = [
+                                                'completed' => 'var(--success)', 'pending' => 'var(--warning)',
+                                                'failed' => 'var(--danger)', 'refunded' => 'var(--text-muted)'
+                                            ];
+                                        ?>
+                                        <span class="badge" style="background: <?php echo $statusColors[$don['payment_status']]; ?>; color: <?php echo $textColors[$don['payment_status']]; ?>;">
                                             <?php echo ucfirst(htmlspecialchars($don['payment_status'])); ?>
                                         </span>
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 8px;">
                                             <!-- NGO Admins cannot edit financial records -->
-                                            <button class="action-btn ngo-btn-transition" style="opacity: 0.5; cursor: not-allowed;" title="View Only">
+                                            <button class="action-btn" style="opacity: 0.5; cursor: not-allowed;" title="View Only">
                                                 <i class="fas fa-lock"></i>
                                             </button>
                                             <?php if($don['pdf_path']): ?>
-                                                <a href="<?php echo htmlspecialchars($don['pdf_path']); ?>" target="_blank" class="action-btn ngo-btn-transition" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="Download Receipt">
+                                                <a href="<?php echo htmlspecialchars($don['pdf_path']); ?>" target="_blank" class="action-btn" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="Download Receipt">
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                             <?php endif; ?>
