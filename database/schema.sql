@@ -187,6 +187,7 @@ CREATE TABLE `events` (
   `banner_image` varchar(255) DEFAULT NULL,
   `coordinator_id` int(11) NOT NULL,
   `status` enum('upcoming','ongoing','completed','cancelled') NOT NULL DEFAULT 'upcoming',
+  `is_attendance_open` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
@@ -255,7 +256,7 @@ CREATE TABLE `tasks` (
   `description` text DEFAULT NULL,
   `priority` enum('low','medium','high') NOT NULL DEFAULT 'medium',
   `deadline` datetime DEFAULT NULL,
-  `completion_status` enum('pending','in_progress','completed') NOT NULL DEFAULT 'pending',
+  `completion_status` enum('pending','in_progress','submitted_for_review','needs_revision','completed') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
@@ -263,6 +264,29 @@ CREATE TABLE `tasks` (
   KEY `event_id` (`event_id`),
   CONSTRAINT `fk_tasks_volunteer` FOREIGN KEY (`volunteer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_tasks_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==========================================================================
+-- NEW: TASK SUBMISSIONS TABLE
+-- ==========================================================================
+CREATE TABLE `task_submissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `volunteer_id` int(11) NOT NULL,
+  `summary` text NOT NULL,
+  `hours_contributed` decimal(5,2) DEFAULT NULL,
+  `challenges_faced` text DEFAULT NULL,
+  `suggestions` text DEFAULT NULL,
+  `proof_file_paths` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`proof_file_paths`)),
+  `coordinator_feedback` text DEFAULT NULL,
+  `status` enum('submitted_for_review','approved','needs_revision') NOT NULL DEFAULT 'submitted_for_review',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `task_id` (`task_id`),
+  KEY `volunteer_id` (`volunteer_id`),
+  CONSTRAINT `fk_submissions_task` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_volunteer` FOREIGN KEY (`volunteer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==========================================================================
@@ -290,6 +314,7 @@ CREATE TABLE `attendance` (
 CREATE TABLE `notifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `recipient_id` int(11) NOT NULL,
+  `role_id` int(11) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `notification_type` varchar(50) NOT NULL,
@@ -298,8 +323,10 @@ CREATE TABLE `notifications` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `recipient_id` (`recipient_id`),
+  KEY `role_id` (`role_id`),
   KEY `read_status` (`read_status`),
-  CONSTRAINT `fk_notifications_user` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_notifications_user` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_notifications_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==========================================================================

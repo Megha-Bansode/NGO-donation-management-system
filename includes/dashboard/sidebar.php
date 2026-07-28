@@ -50,6 +50,10 @@ $role_id = $_SESSION['role_id'] ?? 0;
                     <span>Coordinators</span>
                 </a>
                 <?php endif; ?>
+                <a href="<?php echo $prefix; ?>_inquiries.php" class="menu-item <?php echo $currentPage == $prefix.'_inquiries.php' || $currentPage == $prefix.'_inquiry_detail.php' ? 'active' : ''; ?>">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <span>Contact Inquiries</span>
+                </a>
             </div>
             
             <?php if ($role_id == 1): ?>
@@ -119,8 +123,8 @@ $role_id = $_SESSION['role_id'] ?? 0;
                         Notifications
                         <?php
                         if (!isset($pdo)) { $pdo = getDatabase(); }
-                        $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND read_status = 0");
-                        $stmtCount->execute([$_SESSION['user_id']]);
+                        $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND role_id = ? AND read_status = 0");
+                        $stmtCount->execute([$_SESSION['user_id'], $_SESSION['role_id']]);
                         $sidebarUnread = $stmtCount->fetchColumn();
                         if ($sidebarUnread > 0) {
                             echo '<span style="background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; font-weight: bold;">'.$sidebarUnread.'</span>';
@@ -141,8 +145,16 @@ $role_id = $_SESSION['role_id'] ?? 0;
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
+                <a href="volunteer_available_events.php" class="menu-item <?php echo $currentPage == 'volunteer_available_events.php' ? 'active' : ''; ?>">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Available Events</span>
+                </a>
+                <a href="volunteer_applications.php" class="menu-item <?php echo $currentPage == 'volunteer_applications.php' ? 'active' : ''; ?>">
+                    <i class="fas fa-file-signature"></i>
+                    <span>My Applications</span>
+                </a>
                 <a href="volunteer_events.php" class="menu-item <?php echo $currentPage == 'volunteer_events.php' ? 'active' : ''; ?>">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-calendar-check"></i>
                     <span>My Events</span>
                 </a>
                 <a href="volunteer_tasks.php" class="menu-item <?php echo $currentPage == 'volunteer_tasks.php' ? 'active' : ''; ?>">
@@ -159,8 +171,8 @@ $role_id = $_SESSION['role_id'] ?? 0;
                         Notifications
                         <?php
                         if (!isset($pdo)) { $pdo = getDatabase(); }
-                        $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND read_status = 0");
-                        $stmtCount->execute([$_SESSION['user_id']]);
+                        $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND role_id = ? AND read_status = 0");
+                        $stmtCount->execute([$_SESSION['user_id'], $_SESSION['role_id']]);
                         $sidebarUnread = $stmtCount->fetchColumn();
                         if ($sidebarUnread > 0) {
                             echo '<span style="background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; font-weight: bold;">'.$sidebarUnread.'</span>';
@@ -185,6 +197,10 @@ $role_id = $_SESSION['role_id'] ?? 0;
                     <i class="fas fa-calendar-alt"></i>
                     <span>My Events</span>
                 </a>
+                <a href="coordinator_applications.php" class="menu-item <?php echo $currentPage == 'coordinator_applications.php' ? 'active' : ''; ?>">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <span>Applications</span>
+                </a>
                 <a href="coordinator_volunteers.php" class="menu-item <?php echo $currentPage == 'coordinator_volunteers.php' ? 'active' : ''; ?>">
                     <i class="fas fa-hands-helping"></i>
                     <span>Volunteers</span>
@@ -192,6 +208,10 @@ $role_id = $_SESSION['role_id'] ?? 0;
                 <a href="coordinator_tasks.php" class="menu-item <?php echo $currentPage == 'coordinator_tasks.php' ? 'active' : ''; ?>">
                     <i class="fas fa-tasks"></i>
                     <span>Tasks</span>
+                </a>
+                <a href="coordinator_task_submissions.php" class="menu-item <?php echo $currentPage == 'coordinator_task_submissions.php' ? 'active' : ''; ?>">
+                    <i class="fas fa-file-signature"></i>
+                    <span>Task Submissions</span>
                 </a>
                 <a href="coordinator_attendance.php" class="menu-item <?php echo $currentPage == 'coordinator_attendance.php' ? 'active' : ''; ?>">
                     <i class="fas fa-clipboard-check"></i>

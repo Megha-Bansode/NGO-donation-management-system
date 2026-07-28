@@ -36,26 +36,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title && $message && $target_audience) {
                 try {
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, title, message, notification_type) VALUES (?, ?, ?, ?)");
+                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) VALUES (?, ?, ?, ?, ?)");
                     $count = 0;
                     
                     if ($target_audience === 'all') {
                         $error_msg = "NGO Admins cannot broadcast to all users globally.";
                     } elseif (strpos($target_audience, 'role_') === 0) {
                         $role_id = (int) str_replace('role_', '', $target_audience);
-                        $users = $pdo->prepare("SELECT id FROM users WHERE role_id = ?");
+                        $users = $pdo->prepare("SELECT id, role_id FROM users WHERE role_id = ?");
                         $users->execute([$role_id]);
-                        $users = $users->fetchAll(PDO::FETCH_COLUMN);
+                        $users = $users->fetchAll(PDO::FETCH_ASSOC);
                         
-                        foreach ($users as $uid) {
-                            $stmt->execute([$uid, $title, $message, $type]);
+                        foreach ($users as $u) {
+                            $stmt->execute([$u['id'], $u['role_id'], $title, $message, $type]);
                             $count++;
                         }
                         $pdo->commit();
                         $success_msg = "Broadcast sent successfully to $count users.";
                     } else if (strpos($target_audience, 'user_') === 0) {
                         $uid = (int) str_replace('user_', '', $target_audience);
-                        $stmt->execute([$uid, $title, $message, $type]);
+                        $uq = $pdo->prepare("SELECT role_id FROM users WHERE id = ?");
+                        $uq->execute([$uid]);
+                        $r_id = $uq->fetchColumn();
+                        
+                        $stmt->execute([$uid, $r_id, $title, $message, $type]);
                         $pdo->commit();
                         $success_msg = "Broadcast sent successfully.";
                     } else {

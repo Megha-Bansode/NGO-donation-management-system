@@ -177,7 +177,7 @@ function get_volunteer_recent_activity($pdo, $volunteer_id, $limit = 5) {
         UNION ALL
         (
             SELECT title as title, 'Notification Received' as description, created_at as event_date, 'fas fa-bell' as icon, 'var(--warning)' as color 
-            FROM notifications WHERE recipient_id = ?
+            FROM notifications WHERE recipient_id = ? AND role_id = 4
         )
         ORDER BY event_date DESC
         LIMIT " . (int)$limit
@@ -195,7 +195,7 @@ function get_volunteer_notifications($pdo, $volunteer_id, $limit = 50) {
 
     $stmt = $pdo->prepare("
         SELECT * FROM notifications 
-        WHERE recipient_id = ? AND read_status = 0 
+        WHERE recipient_id = ? AND role_id = 4 AND read_status = 0 
         ORDER BY created_at DESC 
         LIMIT " . (int)$limit
     );
@@ -249,7 +249,7 @@ function get_volunteer_all_notifications($pdo, $volunteer_id) {
 
     $stmt = $pdo->prepare("
         SELECT * FROM notifications 
-        WHERE recipient_id = ? 
+        WHERE recipient_id = ? AND role_id = 4 
         ORDER BY created_at DESC 
         LIMIT 50
     ");

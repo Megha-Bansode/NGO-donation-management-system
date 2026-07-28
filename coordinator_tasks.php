@@ -40,7 +40,7 @@ $allVolunteers = $volStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Helper function to send notification
 function sendNotification($pdo, $recipient_id, $title, $message) {
-    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, title, message, notification_type) VALUES (?, ?, ?, 'System')");
+    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) VALUES (?, 4, ?, ?, 'System')");
     $stmt->execute([$recipient_id, $title, $message]);
 }
 

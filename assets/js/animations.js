@@ -8,12 +8,40 @@
 
 const AnimationEngine = {
     init() {
+        this.injectGlobalAnimations();
         this.initScrollReveal();
         this.initLazyReveal();
         this.initCounterAnimation();
         this.initProgressAnimation();
         this.initSmoothScrollHelper();
         this.initCardHoverEffects();
+    },
+
+    /* ==========================================================================
+       GLOBAL DYNAMIC INJECTION
+       ========================================================================== */
+    injectGlobalAnimations() {
+        // Dynamically add reveal-on-scroll to major components to avoid massive PHP edits
+        const revealTargets = document.querySelectorAll('.glass-card, .kpi-card, .campaign-card, .premium-glass-card, .receipt-container, .secure-payment-panel');
+        revealTargets.forEach(el => {
+            if (!el.classList.contains('reveal-on-scroll') && !el.closest('.lazy-reveal-group')) {
+                el.classList.add('reveal-on-scroll');
+            }
+        });
+
+        // Add btn-hover-lift to all primary/secondary buttons
+        const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .btn-premium, .btn-outline');
+        buttons.forEach(btn => {
+            if (!btn.classList.contains('btn-hover-lift')) {
+                btn.classList.add('btn-hover-lift');
+            }
+        });
+        
+        // Convert any data-animate="fade-up" into standard reveal-on-scroll
+        document.querySelectorAll('[data-animate="fade-up"]').forEach(el => {
+            el.classList.add('reveal-on-scroll');
+            el.removeAttribute('data-animate');
+        });
     },
 
     /* ==========================================================================

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title && $message && $target_audience) {
                 try {
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, title, message, notification_type) VALUES (?, ?, ?, ?)");
+                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) VALUES (?, 4, ?, ?, ?)");
                     $count = 0;
                     
                     if ($target_audience === 'all_my_volunteers') {

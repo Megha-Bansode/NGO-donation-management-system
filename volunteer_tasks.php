@@ -15,23 +15,39 @@ $volunteer_id = $_SESSION['user_id'];
 $success_msg = '';
 $error_msg = '';
 
-// Handle Task Completion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id'])) {
+// Handle Task Completion/Update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id']) && isset($_POST['status'])) {
     $task_id = (int)$_POST['task_id'];
-    try {
-        // Verify task belongs to this volunteer and is not already completed
-        $stmt = $pdo->prepare("SELECT id FROM tasks WHERE id = ? AND volunteer_id = ? AND completion_status != 'completed'");
-        $stmt->execute([$task_id, $volunteer_id]);
-        if ($stmt->rowCount() > 0) {
-            $update = $pdo->prepare("UPDATE tasks SET completion_status = 'completed' WHERE id = ?");
-            $update->execute([$task_id]);
-            $success_msg = "Task marked as completed successfully!";
-        } else {
-            $error_msg = "Invalid task or already completed.";
+    $new_status = $_POST['status'];
+    if (in_array($new_status, ['in_progress', 'completed'])) {
+        try {
+            // Verify task belongs to this volunteer and is not already completed
+            $stmt = $pdo->prepare("SELECT id, event_id, task_name FROM tasks WHERE id = ? AND volunteer_id = ? AND completion_status != 'completed'");
+            $stmt->execute([$task_id, $volunteer_id]);
+            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $update = $pdo->prepare("UPDATE tasks SET completion_status = ? WHERE id = ?");
+                $update->execute([$new_status, $task_id]);
+                
+                if ($new_status === 'completed') {
+                    // Notify Coordinator
+                    $ev = $pdo->prepare("SELECT coordinator_id FROM events WHERE id = ?");
+                    $ev->execute([$row['event_id']]);
+                    $coord_id = $ev->fetchColumn();
+                    if ($coord_id) {
+                        $nMsg = "Volunteer " . $_SESSION['full_name'] . " has completed the task: " . $row['task_name'];
+                        $nStmt = $pdo->prepare("INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) VALUES (?, 5, 'Task Completed', ?, 'System')");
+                        $nStmt->execute([$coord_id, $nMsg]);
+                    }
+                }
+                
+                $success_msg = "Task status updated successfully!";
+            } else {
+                $error_msg = "Invalid task or already completed.";
+            }
+        } catch (PDOException $e) {
+            $error_msg = "An error occurred while updating the task.";
+            error_log("Volunteer Task Update Error: " . $e->getMessage());
         }
-    } catch (PDOException $e) {
-        $error_msg = "An error occurred while updating the task.";
-        error_log("Volunteer Task Update Error: " . $e->getMessage());
     }
 }
 
@@ -42,7 +58,8 @@ try {
         SELECT t.*, e.title as event_title 
         FROM tasks t
         JOIN events e ON t.event_id = e.id
-        WHERE t.volunteer_id = ?
+        JOIN volunteer_registrations vr ON t.event_id = vr.event_id AND t.volunteer_id = vr.volunteer_id
+        WHERE t.volunteer_id = ? AND vr.approval_status = 'approved'
         ORDER BY FIELD(t.completion_status, 'pending', 'in_progress', 'completed'), t.deadline ASC, FIELD(t.priority, 'high', 'medium', 'low')
     ");
     $stmt->execute([$volunteer_id]);
@@ -130,15 +147,24 @@ try {
                                         $statusClass = 'status-pending';
                                         if ($task['completion_status'] == 'completed') $statusClass = 'status-active';
                                         if ($task['completion_status'] == 'in_progress') $statusClass = 'status-warning';
+                                        if ($task['completion_status'] == 'submitted_for_review') $statusClass = 'status-inactive';
+                                        if ($task['completion_status'] == 'needs_revision') $statusClass = 'status-danger';
                                         ?>
                                         <span class="status-badge <?php echo $statusClass; ?>"><?php echo ucfirst(str_replace('_', ' ', $task['completion_status'])); ?></span>
                                     </td>
                                     <td>
-                                        <?php if ($task['completion_status'] !== 'completed'): ?>
-                                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to mark this task as completed?');">
+                                        <?php if ($task['completion_status'] === 'pending'): ?>
+                                            <form method="POST" style="display:inline;">
                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                                <button type="submit" class="btn-primary" style="padding: 5px 12px; font-size: 0.75rem; border: none; cursor: pointer; background: var(--success);"><i class="fas fa-check"></i> Complete</button>
+                                                <input type="hidden" name="status" value="in_progress">
+                                                <button type="submit" class="btn-primary" style="padding: 5px 12px; font-size: 0.75rem; border: none; cursor: pointer; background: var(--warning);"><i class="fas fa-spinner"></i> Start</button>
                                             </form>
+                                        <?php elseif ($task['completion_status'] === 'in_progress'): ?>
+                                            <a href="volunteer_task_submit.php?id=<?php echo $task['id']; ?>" class="btn-primary" style="padding: 5px 12px; font-size: 0.75rem; text-decoration: none; display: inline-block; background: var(--success);"><i class="fas fa-upload"></i> Submit Work</a>
+                                        <?php elseif ($task['completion_status'] === 'needs_revision'): ?>
+                                            <a href="volunteer_task_submit.php?id=<?php echo $task['id']; ?>" class="btn-primary" style="padding: 5px 12px; font-size: 0.75rem; text-decoration: none; display: inline-block; background: var(--danger);"><i class="fas fa-edit"></i> Edit Submission</a>
+                                        <?php elseif ($task['completion_status'] === 'submitted_for_review'): ?>
+                                            <span style="color: var(--text-muted); font-size: 0.9rem;"><i class="fas fa-hourglass-half"></i> In Review</span>
                                         <?php else: ?>
                                             <span style="color: var(--success); font-size: 1.2rem;"><i class="fas fa-check-circle"></i></span>
                                         <?php endif; ?>

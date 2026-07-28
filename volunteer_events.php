@@ -17,14 +17,15 @@ $volunteer_id = $_SESSION['user_id'];
 $events = [];
 try {
     $stmt = $pdo->prepare("
-        SELECT e.*, u.full_name as coordinator_name, vr.approval_status, vr.attendance_status 
+        SELECT e.*, u.full_name as coordinator_name, vr.approval_status, vr.attendance_status,
+               (SELECT COUNT(*) FROM tasks t WHERE t.event_id = e.id AND t.volunteer_id = ?) as task_count
         FROM events e
         JOIN volunteer_registrations vr ON e.id = vr.event_id
         JOIN users u ON e.coordinator_id = u.id
-        WHERE vr.volunteer_id = ? 
+        WHERE vr.volunteer_id = ? AND vr.approval_status = 'approved'
         ORDER BY e.event_date DESC
     ");
-    $stmt->execute([$volunteer_id]);
+    $stmt->execute([$volunteer_id, $volunteer_id]);
     $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Volunteer Events Error: " . $e->getMessage());
@@ -68,10 +69,10 @@ try {
                                 <tr>
                                     <th>Event Name</th>
                                     <th>Coordinator</th>
-                                    <th>Date & Time</th>
-                                    <th>Venue</th>
-                                    <th>Registration Status</th>
-                                    <th>Event Status</th>
+                                    <th>Date & Venue</th>
+                                    <th>Attendance</th>
+                                    <th>Task Count</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,33 +80,29 @@ try {
                                 <tr>
                                     <td>
                                         <strong style="color: var(--text-dark); display: block;"><?php echo htmlspecialchars($evt['title']); ?></strong>
-                                        <span style="font-size: 0.75rem; color: var(--text-muted);"><?php echo htmlspecialchars($evt['event_type'] ?? 'General'); ?></span>
                                     </td>
                                     <td>
                                         <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary-dark);"><?php echo htmlspecialchars($evt['coordinator_name']); ?></span>
                                     </td>
                                     <td>
                                         <div style="font-size: 0.85rem; color: var(--text-dark); font-weight: 600;"><?php echo date('M d, Y', strtotime($evt['event_date'])); ?></div>
-                                        <div style="font-size: 0.75rem; color: var(--text-muted);"><?php echo date('g:i A', strtotime($evt['event_time'])); ?></div>
-                                    </td>
-                                    <td>
-                                        <span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($evt['venue']); ?></span>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($evt['venue']); ?></div>
                                     </td>
                                     <td>
                                         <?php 
-                                        $regClass = 'status-pending';
-                                        if ($evt['approval_status'] == 'approved') $regClass = 'status-active';
-                                        if ($evt['approval_status'] == 'rejected') $regClass = 'status-inactive';
+                                        $attClass = 'status-pending'; // default
+                                        if ($evt['attendance_status'] == 'attended' || $evt['attendance_status'] == 'present') $attClass = 'status-active';
+                                        if ($evt['attendance_status'] == 'absent') $attClass = 'status-inactive';
                                         ?>
-                                        <span class="status-badge <?php echo $regClass; ?>"><?php echo ucfirst($evt['approval_status']); ?></span>
+                                        <span class="status-badge <?php echo $attClass; ?>"><?php echo ucfirst($evt['attendance_status']); ?></span>
                                     </td>
                                     <td>
-                                        <?php 
-                                        $statusClass = 'status-pending';
-                                        if ($evt['status'] == 'completed') $statusClass = 'status-active';
-                                        if ($evt['status'] == 'cancelled') $statusClass = 'status-inactive';
-                                        ?>
-                                        <span class="status-badge <?php echo $statusClass; ?>"><?php echo ucfirst($evt['status']); ?></span>
+                                        <span class="badge" style="background: rgba(0,0,0,0.05); color: var(--text-dark); font-weight: 600;">
+                                            <?php echo (int)$evt['task_count']; ?> Tasks
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="volunteer_tasks.php" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem; text-decoration: none;">View Details</a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

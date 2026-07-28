@@ -7,5 +7,7 @@
             "name": "Senior Software Architect"
         }
     ],
-    "require": {}
+    "require": {
+        "razorpay/razorpay": "^2.9"
+    }
 }

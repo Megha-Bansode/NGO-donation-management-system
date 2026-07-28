@@ -350,7 +350,7 @@ $chartAmountsJSON = json_encode($chartData['amounts']);
                                     <?php foreach($messages as $msg): ?>
                                     <tr>
                                         <td>
-                                            <a href="admin_messages.php" style="text-decoration: none;">
+                                            <a href="admin_inquiry_detail.php?id=<?php echo $msg['id']; ?>" style="text-decoration: none;">
                                                 <strong style="color: var(--text-dark); display:block;"><?php echo htmlspecialchars($msg['name']); ?></strong>
                                                 <span style="font-size: 0.75rem; color: var(--text-muted);"><?php echo htmlspecialchars($msg['email']); ?></span>
                                             </a>

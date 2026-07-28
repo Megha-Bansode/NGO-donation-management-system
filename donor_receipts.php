@@ -62,6 +62,28 @@ if ($receiptNum) {
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .receipt-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background-image: url('<?php echo defined("APP_LOGO_PATH") ? htmlspecialchars(APP_LOGO_PATH) : "assets/images/logo/arohan-logo.jpeg"; ?>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .receipt-header, .receipt-body, .receipt-footer {
+            position: relative;
+            z-index: 1;
         }
         .receipt-header {
             display: flex;
@@ -121,6 +143,10 @@ if ($receiptNum) {
             border-top: 2px solid #f1f5f9;
         }
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
             .sidebar, .topbar, .page-header, .btn-primary, .btn-secondary, .print-hide {
                 display: none !important;
             }
@@ -157,7 +183,15 @@ if ($receiptNum) {
                 <div class="receipt-container">
                     <div class="receipt-header">
                         <div class="receipt-brand">
-                            <i class="fas fa-hands-helping"></i> <?php echo APP_NAME; ?>
+                            <?php 
+                            $logoPath = defined('APP_LOGO_PATH') ? APP_LOGO_PATH : 'assets/images/logo/arohan-logo.jpeg';
+                            if (file_exists(__DIR__ . '/' . $logoPath)): 
+                            ?>
+                                <img src="<?php echo htmlspecialchars($logoPath); ?>" alt="<?php echo htmlspecialchars(APP_NAME); ?> Logo" style="width: 65px; height: auto; object-fit: contain;">
+                                <span><?php echo htmlspecialchars(APP_NAME); ?></span>
+                            <?php else: ?>
+                                <span><?php echo htmlspecialchars(APP_NAME); ?></span>
+                            <?php endif; ?>
                         </div>
                         <div class="receipt-meta">
                             <strong>Receipt No:</strong> <?php echo htmlspecialchars($viewReceipt['receipt_number']); ?><br>

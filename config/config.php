@@ -6,6 +6,7 @@
 define('APP_NAME', 'Arohan Foundation');
 define('APP_URL', 'http://localhost/NGO-donation-management-system');
 define('APP_SECRET', 'ArohanSecretKey_2026_!@#Secure'); // Used for HMAC signed cookies
+define('APP_LOGO_PATH', 'assets/images/logo/arohan-logo.jpeg'); // Centralized logo path
 
 // Currency Settings
 define('APP_CURRENCY', 'INR');

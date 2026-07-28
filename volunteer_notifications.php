@@ -17,18 +17,18 @@ $success_msg = '';
 // Handle actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'mark_read' && isset($_POST['notification_id'])) {
-        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE id = ? AND recipient_id = ?");
-        $stmt->execute([(int)$_POST['notification_id'], $volunteer_id]);
+        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE id = ? AND recipient_id = ? AND role_id = ?");
+        $stmt->execute([(int)$_POST['notification_id'], $volunteer_id, $_SESSION['role_id']]);
     } elseif ($_POST['action'] === 'mark_all_read') {
-        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ? AND read_status = 0");
-        $stmt->execute([$volunteer_id]);
+        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ? AND role_id = ? AND read_status = 0");
+        $stmt->execute([$volunteer_id, $_SESSION['role_id']]);
         $success_msg = "All notifications marked as read.";
     }
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'mark_all_read') {
-    $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ? AND read_status = 0");
-    $stmt->execute([$volunteer_id]);
+    $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ? AND role_id = ? AND read_status = 0");
+    $stmt->execute([$volunteer_id, $_SESSION['role_id']]);
     header("Location: volunteer_notifications.php");
     exit;
 }
@@ -36,8 +36,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'mark_all_read') {
 // Fetch all notifications
 $notifications = [];
 try {
-    $stmt = $pdo->prepare("SELECT * FROM notifications WHERE recipient_id = ? ORDER BY created_at DESC LIMIT 50");
-    $stmt->execute([$volunteer_id]);
+    $stmt = $pdo->prepare("SELECT * FROM notifications WHERE recipient_id = ? AND role_id = ? ORDER BY created_at DESC LIMIT 50");
+    $stmt->execute([$volunteer_id, $_SESSION['role_id']]);
     $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {}
 ?>

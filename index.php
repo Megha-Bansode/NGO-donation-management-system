@@ -4,6 +4,12 @@
  * Donatix inspired structure with original codebase
  */
 define('APP_ROOT', __DIR__);
+
+// Load config and security for CSRF token
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/core/Security.php';
+session_start();
+$csrfToken = Security::generateCSRF();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -505,26 +511,28 @@ define('APP_ROOT', __DIR__);
                 </div>
                 
                 <div class="contact-form">
-                    <form>
+                    <form id="contactForm">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
+                        <div id="contactFormStatus" style="display:none; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"></div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>First Name</label>
-                                <input type="text" class="form-control" placeholder="John" required>
+                                <input type="text" name="first_name" class="form-control" placeholder="John" required>
                             </div>
                             <div class="form-group">
                                 <label>Last Name</label>
-                                <input type="text" class="form-control" placeholder="Doe" required>
+                                <input type="text" name="last_name" class="form-control" placeholder="Doe" required>
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 24px;">
                             <label>Email Address</label>
-                            <input type="email" class="form-control" placeholder="john@example.com" required>
+                            <input type="email" name="email" class="form-control" placeholder="john@example.com" required>
                         </div>
                         <div class="form-group" style="margin-bottom: 24px;">
                             <label>Message</label>
-                            <textarea class="form-control" rows="4" placeholder="How can we help?" required></textarea>
+                            <textarea name="message" class="form-control" rows="4" placeholder="How can we help?" minlength="20" maxlength="2000" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-premium w-100">Send Message</button>
+                        <button type="submit" id="contactSubmitBtn" class="btn btn-premium w-100">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -586,6 +594,58 @@ define('APP_ROOT', __DIR__);
     </footer>
 
     <script src="assets/js/landing.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.getElementById('contactForm');
+        const contactStatus = document.getElementById('contactFormStatus');
+        const submitBtn = document.getElementById('contactSubmitBtn');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // UI Loading state
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                contactStatus.style.display = 'none';
+                
+                const formData = new FormData(this);
+
+                fetch('api/submit_contact.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    
+                    contactStatus.style.display = 'block';
+                    if(data.status === 'success') {
+                        contactStatus.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                        contactStatus.style.color = '#059669';
+                        contactStatus.innerHTML = '<i class="fas fa-check-circle"></i> ' + data.message;
+                        contactForm.reset();
+                    } else {
+                        contactStatus.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                        contactStatus.style.color = '#DC2626';
+                        contactStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    contactStatus.style.display = 'block';
+                    contactStatus.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                    contactStatus.style.color = '#DC2626';
+                    contactStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> An error occurred. Please try again.';
+                    console.error('Error:', error);
+                });
+            });
+        }
+    });
+    </script>
 </body>
 </html>
 

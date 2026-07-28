@@ -30,12 +30,12 @@
             $unreadCount = 0;
             $topbarNotifs = [];
             if (isset($pdo)) {
-                $stmt = $pdo->prepare("SELECT * FROM notifications WHERE recipient_id = ? AND read_status = 0 ORDER BY created_at DESC LIMIT 5");
-                $stmt->execute([$_SESSION['user_id']]);
+                $stmt = $pdo->prepare("SELECT * FROM notifications WHERE recipient_id = ? AND role_id = ? AND read_status = 0 ORDER BY created_at DESC LIMIT 5");
+                $stmt->execute([$_SESSION['user_id'], $_SESSION['role_id']]);
                 $topbarNotifs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
-                $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND read_status = 0");
-                $stmtCount->execute([$_SESSION['user_id']]);
+                $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_id = ? AND role_id = ? AND read_status = 0");
+                $stmtCount->execute([$_SESSION['user_id'], $_SESSION['role_id']]);
                 $unreadCount = $stmtCount->fetchColumn();
             }
             ?>
@@ -68,7 +68,7 @@
         </div>
         
         <?php if ($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
-        <a href="admin_messages.php" class="action-btn" style="text-decoration: none; color: inherit;">
+        <a href="<?php echo ($role_id == 2) ? 'ngo' : 'admin'; ?>_inquiries.php" class="action-btn" style="text-decoration: none; color: inherit;">
             <i class="fas fa-envelope"></i>
         </a>
         <?php endif; ?>

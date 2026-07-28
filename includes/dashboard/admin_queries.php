@@ -220,7 +220,7 @@ function get_unread_notifications($pdo, $limit = 5) {
         $stmt = $pdo->prepare("
             SELECT title, message, created_at, notification_type as type
             FROM notifications
-            WHERE read_status = 0 AND recipient_id = :user_id
+            WHERE read_status = 0 AND recipient_id = :user_id AND role_id = 1
             ORDER BY created_at DESC
             LIMIT :limit
         ");
@@ -238,13 +238,13 @@ function get_unread_notifications($pdo, $limit = 5) {
  */
 function get_contact_messages($pdo, $limit = 5) {
     try {
-        $stmt = $pdo->query("SHOW TABLES LIKE 'contact_messages'");
+        $stmt = $pdo->query("SHOW TABLES LIKE 'contact_inquiries'");
         if ($stmt->rowCount() == 0) return [];
 
         $stmt = $pdo->prepare("
-            SELECT name, email, subject, created_at, status
-            FROM contact_messages
-            ORDER BY created_at DESC
+            SELECT inquiry_id as id, CONCAT(first_name, ' ', last_name) as name, email, SUBSTRING(message, 1, 50) as subject, submitted_at as created_at, status
+            FROM contact_inquiries
+            ORDER BY submitted_at DESC
             LIMIT :limit
         ");
         $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);

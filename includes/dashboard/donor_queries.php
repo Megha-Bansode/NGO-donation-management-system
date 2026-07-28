@@ -139,7 +139,7 @@ function getDonorRecentActivity(PDO $pdo, int $donor_id, $limit = 5) {
         UNION ALL
         (
             SELECT title as title, 'Notification Received' as description, created_at as event_date, 'fas fa-bell' as icon, 'var(--warning)' as color 
-            FROM notifications WHERE recipient_id = ?
+            FROM notifications WHERE recipient_id = ? AND role_id = 3
         )
         UNION ALL
         (
@@ -162,7 +162,7 @@ function getDonorNotifications(PDO $pdo, int $donor_id, $limit = 50) {
 
     $stmt = $pdo->prepare("
         SELECT * FROM notifications 
-        WHERE recipient_id = ? AND read_status = 0 
+        WHERE recipient_id = ? AND role_id = 3 AND read_status = 0 
         ORDER BY created_at DESC 
         LIMIT " . (int)$limit
     );
@@ -179,7 +179,7 @@ function getDonorAllNotifications(PDO $pdo, int $donor_id) {
 
     $stmt = $pdo->prepare("
         SELECT * FROM notifications 
-        WHERE recipient_id = ? 
+        WHERE recipient_id = ? AND role_id = 3 
         ORDER BY created_at DESC 
         LIMIT 50
     ");
@@ -250,8 +250,8 @@ function process_donation(PDO $pdo, int $donor_id, int $campaign_id, float $amou
 
         // 5. Create Notification for Donor
         $stmtNotif = $pdo->prepare("
-            INSERT INTO notifications (recipient_id, title, message, notification_type) 
-            VALUES (?, 'Donation Successful', ?, 'Donation')
+            INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) 
+            VALUES (?, 3, 'Donation Successful', ?, 'Donation')
         ");
         $msg = "Thank you for your generous donation of " . formatIndianCurrency($amount) . ". Your receipt number is " . $receipt_number . ".";
         $stmtNotif->execute([$donor_id, $msg]);

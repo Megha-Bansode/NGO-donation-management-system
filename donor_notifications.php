@@ -15,11 +15,11 @@ $donor_id = $_SESSION['user_id'];
 // Handle Mark as Read Actions
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'mark_all_read') {
-        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ?");
-        $stmt->execute([$donor_id]);
+        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE recipient_id = ? AND role_id = ?");
+        $stmt->execute([$donor_id, $_SESSION['role_id']]);
     } elseif ($_GET['action'] == 'mark_read' && isset($_GET['id'])) {
-        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE id = ? AND recipient_id = ?");
-        $stmt->execute([$_GET['id'], $donor_id]);
+        $stmt = $pdo->prepare("UPDATE notifications SET read_status = 1 WHERE id = ? AND recipient_id = ? AND role_id = ?");
+        $stmt->execute([$_GET['id'], $donor_id, $_SESSION['role_id']]);
     }
     // Redirect to clean URL
     header("Location: donor_notifications.php");

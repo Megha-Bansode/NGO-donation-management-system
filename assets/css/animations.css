@@ -136,3 +136,62 @@
 /* JS Triggered Transitions */
 .counter-anim { transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
 .progress-anim { transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Global UI Transitions */
+body {
+    animation: fadeUp 0.4s ease-out forwards;
+}
+
+.btn-primary, .btn-secondary, .btn-premium, .btn-outline {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover, .btn-secondary:hover, .btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:active, .btn-secondary:active, .btn-premium:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.modern-table tbody tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.modern-table tbody tr:hover {
+    background-color: #f8fafc;
+    transform: scale(1.005);
+}
+
+.form-control, .form-select {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: var(--primary);
+}
+
+/* Modal Animations */
+.modal-backdrop {
+    animation: fadeUp 0.3s ease forwards;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.shake-error {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}

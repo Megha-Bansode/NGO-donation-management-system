@@ -36,24 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title && $message && $target) {
                 try {
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, title, message, notification_type) VALUES (?, ?, ?, ?)");
+                    $stmt = $pdo->prepare("INSERT INTO notifications (recipient_id, role_id, title, message, notification_type) VALUES (?, ?, ?, ?, ?)");
                     $count = 0;
                     
                     if ($target === 'all') {
-                        $users = $pdo->query("SELECT id FROM users")->fetchAll(PDO::FETCH_COLUMN);
+                        $users = $pdo->query("SELECT id, role_id FROM users")->fetchAll(PDO::FETCH_ASSOC);
                     } else if (strpos($target, 'role_') === 0) {
                         $role_id = (int) str_replace('role_', '', $target);
-                        $users = $pdo->prepare("SELECT id FROM users WHERE role_id = ?");
+                        $users = $pdo->prepare("SELECT id, role_id FROM users WHERE role_id = ?");
                         $users->execute([$role_id]);
-                        $users = $users->fetchAll(PDO::FETCH_COLUMN);
+                        $users = $users->fetchAll(PDO::FETCH_ASSOC);
                     } else if (strpos($target, 'user_') === 0) {
-                        $users = [(int) str_replace('user_', '', $target)];
+                        $uid = (int) str_replace('user_', '', $target);
+                        $users = $pdo->prepare("SELECT id, role_id FROM users WHERE id = ?");
+                        $users->execute([$uid]);
+                        $users = $users->fetchAll(PDO::FETCH_ASSOC);
                     } else {
                         $users = [];
                     }
                     
-                    foreach ($users as $uid) {
-                        $stmt->execute([$uid, $title, $message, $type]);
+                    foreach ($users as $u) {
+                        $stmt->execute([$u['id'], $u['role_id'], $title, $message, $type]);
                         $count++;
                     }
                     
