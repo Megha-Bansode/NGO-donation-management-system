@@ -263,7 +263,7 @@ $csrfToken = Security::generateCSRF();
                 <!-- Card 2 -->
                 <div class="campaign-card" data-animate="fade-up" data-depth="-0.02" style="transition-delay: 0.1s;">
                     <div class="card-media">
-                        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&q=80" alt="Water">
+                        <img src="assets/images/campaigns/water-initiative.jpeg" alt="Water">
                         <div class="card-badge green">Clean Water</div>
                         <div class="card-overlay"></div>
                     </div>

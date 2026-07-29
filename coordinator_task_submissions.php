@@ -88,7 +88,7 @@ $stmt = $pdo->prepare("
     JOIN events e ON t.event_id = e.id
     JOIN users u ON ts.volunteer_id = u.id
     WHERE e.coordinator_id = ? AND ts.status = 'submitted_for_review'
-    ORDER BY ts.submitted_at DESC
+    ORDER BY ts.created_at DESC
 ");
 $stmt->execute([$coordinator_id]);
 $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
